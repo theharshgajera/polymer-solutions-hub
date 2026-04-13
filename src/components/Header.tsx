@@ -1,21 +1,22 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About Us", href: "#about" },
-  { label: "Products", href: "#products" },
-  { label: "Industries", href: "#industries" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "Home", to: "/" },
+  { label: "About Us", to: "/about" },
+  { label: "Products", to: "/products" },
+  { label: "Industries", to: "/industries" },
+  { label: "Contact Us", to: "/contact" },
 ];
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Top bar */}
       <div className="bg-navy text-primary-foreground text-sm">
         <div className="container mx-auto flex items-center justify-between py-2 px-4">
           <div className="flex items-center gap-6">
@@ -34,33 +35,35 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Main nav */}
       <nav className="bg-background/95 backdrop-blur-md shadow-sm">
         <div className="container mx-auto flex items-center justify-between py-3 px-4">
-          <a href="#home" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt="Multi-Tech Polymers" className="h-14 w-auto" />
-          </a>
+          </Link>
 
-          {/* Desktop links */}
           <ul className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="font-body font-semibold text-sm tracking-wide text-foreground hover:text-accent transition-colors uppercase"
+              <li key={link.to}>
+                <Link
+                  to={link.to}
+                  className={`font-body font-semibold text-sm tracking-wide uppercase transition-colors ${
+                    location.pathname === link.to
+                      ? "text-accent"
+                      : "text-foreground hover:text-accent"
+                  }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
 
-          <a
-            href="#contact"
+          <Link
+            to="/contact"
             className="hidden lg:inline-flex bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-body font-semibold text-sm hover:bg-accent transition-colors"
           >
             Get a Quote
-          </a>
+          </Link>
 
           <button
             className="lg:hidden text-foreground"
@@ -71,28 +74,27 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile menu */}
         {mobileOpen && (
           <div className="lg:hidden bg-background border-t border-border px-4 pb-4">
             <ul className="flex flex-col gap-3 pt-3">
               {navLinks.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
                     className="block py-2 font-body font-semibold text-sm text-foreground hover:text-accent"
                     onClick={() => setMobileOpen(false)}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
-              <a
-                href="#contact"
+              <Link
+                to="/contact"
                 className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-body font-semibold text-sm text-center"
                 onClick={() => setMobileOpen(false)}
               >
                 Get a Quote
-              </a>
+              </Link>
             </ul>
           </div>
         )}
