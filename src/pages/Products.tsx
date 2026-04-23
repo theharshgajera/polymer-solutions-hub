@@ -1,26 +1,133 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const products = [
-  { id: "nylon", name: "Nylon Rods & Sheets", desc: "High-strength nylon rods, bushes, profiles, and machinery parts. Excellent mechanical strength and wear resistance for demanding applications." },
-  { id: "cast-nylon", name: "Cast Nylon Rods & Sheets", desc: "Superior wear resistance and mechanical properties. Ideal for heavy-duty industrial use with excellent dimensional stability." },
-  { id: "uhmwpe", name: "UHMWPE Rods & Sheets", desc: "Ultra-high molecular weight polyethylene for extreme abrasion resistance, low friction, and outstanding impact strength." },
-  { id: "pp", name: "Polypropylene (PP) Rods & Sheets", desc: "Excellent chemical resistance, lightweight, and cost-effective. Suitable for chemical tanks, ducts, and laboratory equipment." },
-  { id: "ptfe", name: "PTFE (Teflon) Rods & Sheets", desc: "Non-stick, heat-resistant teflon products. Outstanding chemical inertness and very low friction coefficient." },
-  { id: "pu", name: "Polyurethane (PU) Rods & Sheets", desc: "Outstanding abrasion resistance, high load-bearing capacity, and excellent resilience for industrial rollers and seals." },
-  { id: "pom", name: "POM (Delrin) Rods & Sheets", desc: "High stiffness, low friction engineering plastic. Excellent dimensional stability and fatigue resistance." },
-  { id: "hdpe", name: "HDPE Sheets & Rods", desc: "High density polyethylene for versatile industrial applications. Chemical resistant and FDA compliant grades available." },
-  { id: "peek", name: "PEEK Rods & Sheets", desc: "Premium high-performance polymer for aerospace, medical, and extreme temperature applications up to 260°C." },
-  { id: "machined", name: "Machined Components", desc: "Precision CNC-machined plastic parts manufactured to your exact specifications and tolerances." },
-  { id: "pvc", name: "PVC Rods & Sheets", desc: "Cost-effective, chemically resistant PVC products for plumbing, chemical processing, and construction." },
-  { id: "polycarbonate", name: "Polycarbonate Rods & Sheets", desc: "Impact-resistant, optically clear engineering plastics. 250x stronger than glass with excellent transparency." },
-  { id: "hylam", name: "Hylam Rods & Sheets", desc: "Laminated phenolic sheets with high electrical insulation and mechanical strength for electrical applications." },
-  { id: "pet", name: "PET Sheets & Rods", desc: "Polyethylene terephthalate with excellent dimensional stability, low moisture absorption, and good machinability." },
-  { id: "pallet-wheel", name: "Pallet Wheels", desc: "Durable nylon flat free pallet wheels designed for heavy-duty warehouse and logistics applications." },
-  { id: "castor-wheel", name: "Castor Wheels", desc: "High-quality castor wheels built from premium materials for smooth mobility in industrial environments." },
-  { id: "trolley-wheel", name: "Trolley Wheels", desc: "Robust trolley wheels engineered for reliable performance in material handling and transport." },
+type Product = {
+  id: string;
+  name: string;
+  desc: string;
+  items: string[];
+  variants?: { label: string; values: string[] };
+};
+
+const products: Product[] = [
+  {
+    id: "ptfe",
+    name: "PTFE Material (Teflon)",
+    desc: "Non-stick, heat-resistant fluoropolymer with outstanding chemical inertness and very low friction coefficient.",
+    items: ["Rod", "Sheet", "Bush", "Ring", "Gasket", "Chevron Packing Set", "Machined Parts"],
+    variants: {
+      label: "Filled Grades",
+      values: [
+        "Carbon Filled PTFE",
+        "Glass Filled PTFE",
+        "Bronze Filled PTFE",
+        "SS Filled PTFE",
+        "PEEK Filled PTFE",
+      ],
+    },
+  },
+  {
+    id: "cast-nylon",
+    name: "Cast Nylon Material (Polyamide)",
+    desc: "Superior wear resistance and mechanical properties. Ideal for heavy-duty industrial use with excellent dimensional stability.",
+    items: ["Rod", "Sheet", "Pipe", "Machined Parts", "Pad", "Pulley", "Customized Parts"],
+    variants: {
+      label: "Grades",
+      values: ["MC 901", "Oilon (Green)", "MOS₂ Cast Nylon"],
+    },
+  },
+  {
+    id: "pp",
+    name: "Polypropylene Material (PP)",
+    desc: "Excellent chemical resistance, lightweight, and cost-effective. Suitable for chemical tanks, ducts, and process equipment.",
+    items: ["Rod", "Sheet", "Pipe", "Flange", "Machined Parts"],
+  },
+  {
+    id: "delrin",
+    name: "Delrin (POM – Polyacetal)",
+    desc: "High stiffness, low friction engineering plastic with excellent dimensional stability and fatigue resistance.",
+    items: ["Rod", "Sheet", "Machined Parts"],
+  },
+  {
+    id: "nylon-6",
+    name: "Nylon 6 (Polyamide 6)",
+    desc: "High-strength extruded polyamide with great mechanical strength and abrasion resistance.",
+    items: ["Rod"],
+  },
+  {
+    id: "bakelite",
+    name: "Bakelite (Hylam)",
+    desc: "Laminated phenolic material with high electrical insulation and mechanical strength for electrical applications.",
+    items: ["Sheet", "Rod"],
+  },
+  {
+    id: "peek",
+    name: "PEEK",
+    desc: "Premium high-performance polymer for aerospace, medical, and extreme temperature applications up to 260°C.",
+    items: ["Rod", "Sheet", "Machined Parts"],
+  },
+  {
+    id: "uhmwpe",
+    name: "UHMWPE",
+    desc: "Ultra-high molecular weight polyethylene with extreme abrasion resistance, low friction, and outstanding impact strength.",
+    items: ["Rod", "Sheet", "Machined Parts"],
+  },
+  {
+    id: "turcite",
+    name: "Turcite",
+    desc: "PTFE-based bearing material providing low friction, stick-slip free movement for machine tool slideways.",
+    items: ["Sheet", "Rod"],
+  },
+  {
+    id: "pc-roofing",
+    name: "Polycarbonate Roofing Sheet",
+    desc: "Turbo / generic polycarbonate roofing sheets — impact resistant, weatherproof and lightweight roofing solution.",
+    items: ["Roofing Sheet"],
+  },
+  {
+    id: "polycarbonate",
+    name: "Polycarbonate Sheet",
+    desc: "Impact-resistant, optically clear engineering plastic — 250x stronger than glass with excellent transparency.",
+    items: ["Sheet"],
+  },
+  {
+    id: "acrylic",
+    name: "Acrylic Sheet",
+    desc: "Crystal-clear, weather-resistant transparent sheet ideal for displays, signage and glazing applications.",
+    items: ["Sheet"],
+  },
+  {
+    id: "pu",
+    name: "Polyurethane (CPU)",
+    desc: "Outstanding abrasion resistance, high load-bearing capacity, and excellent resilience for industrial rollers, wheels and seals.",
+    items: ["Rod", "Sheet", "Bush", "Wheel", "Trolley Wheel", "Stecker Wheel"],
+  },
+  {
+    id: "hdpe",
+    name: "HDPE",
+    desc: "High density polyethylene for versatile industrial applications. Chemical resistant with FDA compliant grades available.",
+    items: ["Rod", "Sheet", "Pipe"],
+  },
+  {
+    id: "rigid-pvc",
+    name: "Rigid PVC",
+    desc: "Cost-effective, chemically resistant rigid PVC for chemical processing, fabrication and construction applications.",
+    items: ["Sheet", "Rod"],
+  },
+  {
+    id: "cast-pu",
+    name: "Cast Polyurethane",
+    desc: "Cast PU with excellent tear strength, abrasion resistance and load-bearing capability for custom industrial parts.",
+    items: ["Custom Cast Parts"],
+  },
+  {
+    id: "pps",
+    name: "PPS (Polyphenylene Sulfide)",
+    desc: "High-performance engineering thermoplastic with exceptional thermal stability and chemical resistance.",
+    items: ["Piston"],
+  },
 ];
 
 const ProductsPage = () => {
@@ -30,34 +137,84 @@ const ProductsPage = () => {
 
       <section className="gradient-hero pt-36 pb-20">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-gold font-body font-semibold text-sm tracking-[0.2em] uppercase mb-3">What We Offer</p>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold text-primary-foreground">Our Products</h1>
+          <p className="text-gold font-body font-semibold text-sm tracking-[0.2em] uppercase mb-3">
+            What We Offer
+          </p>
+          <h1 className="font-heading text-4xl md:text-5xl font-bold text-primary-foreground">
+            Our Products
+          </h1>
           <p className="font-body text-primary-foreground/70 mt-4 max-w-2xl mx-auto">
-            Complete range of engineering plastics rods, sheets, and machined components for every industrial need.
+            Complete range of engineering plastics — rods, sheets, pipes, bushes, wheels and machined components for every industrial need.
           </p>
         </div>
       </section>
 
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <div
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((product, idx) => (
+              <article
                 key={product.id}
-                className="group bg-background rounded-xl p-6 shadow-sm hover:shadow-lg border border-border hover:border-accent/30 transition-all duration-300 hover:-translate-y-1"
+                className="group relative bg-card rounded-xl p-6 shadow-sm hover:shadow-xl border border-border hover:border-accent/40 transition-all duration-300 hover:-translate-y-1 flex flex-col"
               >
-                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary transition-colors">
-                  <div className="w-4 h-4 rounded-sm bg-accent group-hover:bg-primary-foreground transition-colors" />
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-11 h-11 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary transition-colors">
+                    <div className="w-4 h-4 rounded-sm bg-accent group-hover:bg-primary-foreground transition-colors" />
+                  </div>
+                  <span className="font-body text-xs font-semibold text-muted-foreground bg-muted px-2.5 py-1 rounded">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
                 </div>
-                <h3 className="font-heading text-lg font-bold text-foreground mb-2">{product.name}</h3>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">{product.desc}</p>
+
+                <h3 className="font-heading text-xl font-bold text-foreground mb-2">
+                  {product.name}
+                </h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed mb-5">
+                  {product.desc}
+                </p>
+
+                <div className="mb-4">
+                  <p className="font-body text-xs font-semibold uppercase tracking-wider text-foreground/70 mb-2">
+                    Available Forms
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {product.items.map((item) => (
+                      <span
+                        key={item}
+                        className="inline-flex items-center gap-1 text-xs font-body font-medium bg-secondary text-secondary-foreground px-2.5 py-1 rounded"
+                      >
+                        <Check className="w-3 h-3 text-accent" />
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {product.variants && (
+                  <div className="mb-5 pt-4 border-t border-border">
+                    <p className="font-body text-xs font-semibold uppercase tracking-wider text-foreground/70 mb-2">
+                      {product.variants.label}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {product.variants.values.map((v) => (
+                        <span
+                          key={v}
+                          className="inline-block text-xs font-body font-semibold bg-accent/10 text-accent border border-accent/20 px-2.5 py-1 rounded"
+                        >
+                          {v}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-1 text-accent font-body text-sm font-semibold group-hover:gap-2 transition-all"
+                  className="mt-auto inline-flex items-center gap-1 text-accent font-body text-sm font-semibold group-hover:gap-2 transition-all"
                 >
                   Enquire Now <ArrowRight className="w-4 h-4" />
                 </Link>
-              </div>
+              </article>
             ))}
           </div>
         </div>
@@ -66,11 +223,16 @@ const ProductsPage = () => {
       {/* CTA */}
       <section className="gradient-navy py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="font-heading text-3xl font-bold text-primary-foreground mb-4">Can't Find What You Need?</h2>
+          <h2 className="font-heading text-3xl font-bold text-primary-foreground mb-4">
+            Can't Find What You Need?
+          </h2>
           <p className="font-body text-primary-foreground/70 mb-8 max-w-xl mx-auto">
             We manufacture custom engineering plastic parts to your specifications. Contact us for a tailored solution.
           </p>
-          <Link to="/contact" className="inline-flex bg-gold text-foreground px-8 py-3.5 rounded-md font-body font-bold text-sm hover:opacity-90 transition-opacity">
+          <Link
+            to="/contact"
+            className="inline-flex bg-gold text-foreground px-8 py-3.5 rounded-md font-body font-bold text-sm hover:opacity-90 transition-opacity"
+          >
             Request Custom Quote
           </Link>
         </div>
