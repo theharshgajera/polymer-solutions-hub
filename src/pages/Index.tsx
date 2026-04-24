@@ -88,9 +88,14 @@ const Index = () => {
           <p className="font-body text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
             Get in touch for a free consultation and quotation. We manufacture to your exact specifications.
           </p>
-          <Link to="/contact" className="inline-flex bg-gold text-foreground px-8 py-3.5 rounded-md font-body font-bold text-sm hover:opacity-90 transition-opacity">
+          <a 
+            href="https://wa.me/919898470707?text=Hey%2C%20I%20have%20one%20requirement"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex bg-gold text-foreground px-8 py-3.5 rounded-md font-body font-bold text-sm hover:opacity-90 transition-opacity"
+          >
             Get a Free Quote
-          </Link>
+          </a>
         </div>
       </section>
 

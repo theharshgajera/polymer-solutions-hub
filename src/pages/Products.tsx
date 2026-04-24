@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ArrowRight, Check } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ProductSlideshow } from "@/components/ProductSlideshow";
 
 type Product = {
   id: string;
@@ -9,9 +10,10 @@ type Product = {
   desc: string;
   items: string[];
   variants?: { label: string; values: string[] };
+  images?: string[];
 };
 
-const products: Product[] = [
+const rawProducts: Omit<Product, 'images'>[] = [
   {
     id: "ptfe",
     name: "PTFE Material (Teflon)",
@@ -130,6 +132,15 @@ const products: Product[] = [
   },
 ];
 
+const products: Product[] = rawProducts.map((p) => ({
+  ...p,
+  images: [
+    `https://picsum.photos/seed/${p.id}-1/600/400`,
+    `https://picsum.photos/seed/${p.id}-2/600/400`,
+    `https://picsum.photos/seed/${p.id}-3/600/400`,
+  ],
+}));
+
 const ProductsPage = () => {
   return (
     <div className="min-h-screen">
@@ -165,6 +176,8 @@ const ProductsPage = () => {
                     {String(idx + 1).padStart(2, "0")}
                   </span>
                 </div>
+
+                {product.images && <ProductSlideshow images={product.images} />}
 
                 <h3 className="font-heading text-xl font-bold text-foreground mb-2">
                   {product.name}
@@ -208,12 +221,14 @@ const ProductsPage = () => {
                   </div>
                 )}
 
-                <Link
-                  to="/contact"
+                <a
+                  href={`https://wa.me/919898470707?text=${encodeURIComponent(`Hey, I have one requirement regarding ${product.name}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-auto inline-flex items-center gap-1 text-accent font-body text-sm font-semibold group-hover:gap-2 transition-all"
                 >
                   Enquire Now <ArrowRight className="w-4 h-4" />
-                </Link>
+                </a>
               </article>
             ))}
           </div>
@@ -229,12 +244,14 @@ const ProductsPage = () => {
           <p className="font-body text-primary-foreground/70 mb-8 max-w-xl mx-auto">
             We manufacture custom engineering plastic parts to your specifications. Contact us for a tailored solution.
           </p>
-          <Link
-            to="/contact"
+          <a
+            href="https://wa.me/919898470707?text=Hey%2C%20I%20have%20one%20requirement"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex bg-gold text-foreground px-8 py-3.5 rounded-md font-body font-bold text-sm hover:opacity-90 transition-opacity"
           >
             Request Custom Quote
-          </Link>
+          </a>
         </div>
       </section>
 
