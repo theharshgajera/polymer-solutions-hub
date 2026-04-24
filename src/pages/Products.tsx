@@ -3,8 +3,9 @@ import Footer from "@/components/Footer";
 import { ArrowRight, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProductSlideshow } from "@/components/ProductSlideshow";
+import { useState, useEffect } from "react";
 
-type Product = {
+export type Product = {
   id: string;
   name: string;
   desc: string;
@@ -13,7 +14,7 @@ type Product = {
   images?: string[];
 };
 
-const rawProducts: Omit<Product, 'images'>[] = [
+export const rawProducts: Omit<Product, 'images'>[] = [
   {
     id: "ptfe",
     name: "PTFE Material (Teflon)",
@@ -132,16 +133,28 @@ const rawProducts: Omit<Product, 'images'>[] = [
   },
 ];
 
-const products: Product[] = rawProducts.map((p) => ({
-  ...p,
-  images: [
-    `https://picsum.photos/seed/${p.id}-1/600/400`,
-    `https://picsum.photos/seed/${p.id}-2/600/400`,
-    `https://picsum.photos/seed/${p.id}-3/600/400`,
-  ],
-}));
-
 const ProductsPage = () => {
+  const [products, setProducts] = useState<Product[]>(rawProducts);
+
+  useEffect(() => {
+    // Fetch images for all products
+    const fetchAllImages = async () => {
+      try {
+        const promises = rawProducts.map(async (p) => {
+          const res = await fetch(`/api/images?folder=/products/${p.id}&t=${Date.now()}`);
+          if (!res.ok) return { ...p, images: [] };
+          const data = await res.json();
+          return { ...p, images: data.map((img: any) => img.url) };
+        });
+        const updatedProducts = await Promise.all(promises);
+        setProducts(updatedProducts);
+      } catch (error) {
+        console.error("Error fetching images", error);
+      }
+    };
+    
+    fetchAllImages();
+  }, []);
   return (
     <div className="min-h-screen">
       <Header />

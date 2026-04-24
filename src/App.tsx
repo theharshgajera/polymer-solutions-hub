@@ -11,6 +11,7 @@ import Products from "./pages/Products.tsx";
 import Industries from "./pages/Industries.tsx";
 import Contact from "./pages/Contact.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Admin from "./pages/Admin.tsx";
 import { WhatsAppButton } from "./components/WhatsAppButton.tsx";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/products" element={<Products />} />
           <Route path="/industries" element={<Industries />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <WhatsAppButton />
