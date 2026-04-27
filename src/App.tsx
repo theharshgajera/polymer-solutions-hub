@@ -13,6 +13,7 @@ import Contact from "./pages/Contact.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Admin from "./pages/Admin.tsx";
 import { WhatsAppButton } from "./components/WhatsAppButton.tsx";
+import { SocialButtons } from "./components/SocialButtons.tsx";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         <WhatsAppButton />
+        <SocialButtons />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

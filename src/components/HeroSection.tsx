@@ -10,13 +10,12 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 pt-48 pb-20 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in-up">
-            <p className="text-gold font-body font-semibold text-sm tracking-[0.2em] uppercase mb-4">
-              Welcome to Multi-Tech Polymers
+            <p className="text-gold font-body font-semibold text-3xl tracking-[0.2em] uppercase mb-4">
+              Welcome to Multi-Tech
             </p>
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6">
-              Engineering Plastics{" "}
-              <span className="text-gold">Rods & Sheets</span>
-            </h1>
+            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-gold leading-tight mb-6">
+              House of Engineering Plastics Products in form of Sheets, Rods & Bushes
+            </h2>
             <p className="font-body text-primary-foreground/80 text-lg leading-relaxed mb-8 max-w-xl">
               Leading manufacturer and supplier of premium quality engineering plastics — Nylon, Cast Nylon, PTFE, HDPE, PP, UHMWPE, Delrin, PU, PEEK and more. Precision-engineered for demanding industrial applications.
             </p>
@@ -48,7 +47,7 @@ const HeroSection = () => {
             </div>
             {/* Floating badge */}
             <div className="absolute -bottom-4 -left-4 bg-gold text-foreground rounded-xl px-6 py-3 shadow-lg">
-              <p className="font-heading text-2xl font-bold">10+</p>
+              <p className="font-heading text-2xl font-bold">20+</p>
               <p className="font-body text-xs font-semibold">Years Experience</p>
             </div>
           </div>
