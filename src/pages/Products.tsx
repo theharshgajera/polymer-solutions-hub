@@ -103,7 +103,7 @@ export const rawProducts: Omit<Product, 'images'>[] = [
   },
   {
     id: "pu",
-    name: "Polyurethane (CPU)",
+    name: "Polyurethane (PU)",
     desc: "Outstanding abrasion resistance, high load-bearing capacity, and excellent resilience for industrial rollers, wheels and seals.",
     items: ["Rod", "Sheet", "Bush", "Wheel", "Trolley Wheel", "Stecker Wheel"],
   },
