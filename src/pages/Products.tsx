@@ -81,7 +81,7 @@ export const rawProducts: Omit<Product, 'images'>[] = [
     id: "turcite",
     name: "Turcite",
     desc: "PTFE-based bearing material providing low friction, stick-slip free movement for machine tool slideways.",
-    items: ["Sheet", "Rod"],
+    items: ["Sheet"],
   },
   {
     id: "pc-roofing",
