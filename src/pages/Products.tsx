@@ -127,7 +127,7 @@ export const rawProducts: Omit<Product, 'images'>[] = [
   },
   {
     id: "pps",
-    name: "PPS (Polyphenylene Sulfide)",
+    name: "PPS Piston",
     desc: "High-performance engineering thermoplastic with exceptional thermal stability and chemical resistance.",
     items: ["Piston"],
   },
