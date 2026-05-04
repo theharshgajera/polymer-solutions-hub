@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone, Mail, Facebook, Instagram } from "lucide-react";
 import logo from "@/assets/logo-new.png";
+import makeInIndia from "@/assets/make-in-india.png";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -76,14 +77,17 @@ const Header = () => {
             ))}
           </ul>
 
-          <a
-            href="https://wa.me/919898470707?text=Hey%2C%20I%20have%20one%20requirement"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden lg:inline-flex bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-body font-bold text-base hover:bg-accent transition-colors"
-          >
-            Get a Quote
-          </a>
+          <div className="hidden lg:flex items-center gap-6">
+            <img src={makeInIndia} alt="Make in India" className="h-16 w-auto" />
+            <a
+              href="https://wa.me/919898470707?text=Hey%2C%20I%20have%20one%20requirement"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-body font-bold text-base hover:bg-accent transition-colors"
+            >
+              Get a Quote
+            </a>
+          </div>
 
           <button
             className="lg:hidden text-foreground"
