@@ -23,7 +23,7 @@ const HeroSection = () => {
 
       <div className="container mx-auto px-4 pt-48 pb-20 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="animate-fade-in-up">
+          <div className="animate-fade-in-up order-2 lg:order-1">
             <p className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-gold mb-4">
               Welcome to Multi-Tech
             </p>
@@ -49,7 +49,7 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <div className="relative animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+          <div className="relative animate-fade-in-up order-1 lg:order-2" style={{ animationDelay: "0.3s" }}>
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-primary-foreground/10 aspect-[16/10]">
               {heroImages.map((img, index) => (
                 <img
@@ -62,13 +62,13 @@ const HeroSection = () => {
               ))}
             </div>
             {/* Floating badge */}
-            <div className="absolute -bottom-4 -left-4 bg-gold text-foreground rounded-xl px-6 py-3 shadow-lg z-10">
+            <div className="absolute -bottom-4 left-0 md:-left-4 bg-gold text-foreground rounded-xl px-6 py-3 shadow-lg z-10">
               <p className="font-heading text-2xl font-bold">20+</p>
               <p className="font-body text-xs font-semibold">Years Experience</p>
             </div>
 
             {/* Gallery indicators */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            <div className="absolute bottom-4 right-4 md:right-auto md:left-1/2 md:-translate-x-1/2 flex gap-2 z-10">
               {heroImages.map((_, index) => (
                 <button
                   key={index}
@@ -80,7 +80,7 @@ const HeroSection = () => {
                   aria-label={`Go to slide ${index + 1}`}
                 />
               ))}
-              c            </div>
+            </div>
           </div>
         </div>
       </div>

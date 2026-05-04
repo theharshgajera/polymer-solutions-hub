@@ -56,7 +56,7 @@ const Header = () => {
       <nav className="bg-background/95 backdrop-blur-md shadow-sm">
         <div className="container mx-auto flex items-center justify-between py-3 px-4">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Multi-Tech Polymers" className="h-14 w-auto" />
+            <img src={logo} alt="Multi-Tech Polymers" className="h-14 md:h-16 lg:h-20 w-auto transition-all" />
           </Link>
 
           <ul className="hidden lg:flex items-center gap-8">
