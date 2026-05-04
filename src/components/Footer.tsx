@@ -55,7 +55,7 @@ const Footer = () => {
               </div>
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-gold mt-0.5" />
-                <span>Ahmedabad, Gujarat, India</span>
+                <span>3, Gayatri Chamber, Near Gravity Estate, Kevalkanta Ajodh Dairy Road, Rakhial, Ahmedabad, 380023</span>
               </div>
             </div>
           </div>

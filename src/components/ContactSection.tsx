@@ -41,7 +41,7 @@ const ContactSection = () => {
               {[
                 { icon: Phone, label: "+91 98984 70707", href: "tel:+919898470707" },
                 { icon: Mail, label: "multitech9@rediffmail.com", href: "mailto:multitech9@rediffmail.com" },
-                { icon: MapPin, label: "Ahmedabad, Gujarat, India", href: "#" },
+                { icon: MapPin, label: "3, Gayatri Chamber, Near Gravity Estate, Kevalkanta Ajodh Dairy Road, Rakhial, Ahmedabad, 380023", href: "#" },
               ].map((item, i) => (
                 <a key={i} href={item.href} className="flex items-center gap-4 group">
                   <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition-colors">
