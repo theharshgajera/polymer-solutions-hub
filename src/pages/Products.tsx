@@ -131,6 +131,21 @@ export const rawProducts: Omit<Product, 'images'>[] = [
     desc: "High-performance engineering thermoplastic with exceptional thermal stability and chemical resistance.",
     items: ["Piston"],
   },
+  {
+    id: "turbo-fan",
+    name: "High Performance Turbo Fan",
+    desc: "Industrial-grade turbo fan with a heavy-duty plastic body. Designed for powerful airflow, energy efficiency, and low-noise, long-lasting performance.",
+    items: [],
+    variants: {
+      label: "Features",
+      values: [
+        "High Speed Air Delivery",
+        "Energy Efficient Design",
+        "Low Noise Operation",
+        "Bulk Supply Available"
+      ],
+    },
+  },
 ];
 
 const ProductsPage = () => {
@@ -199,22 +214,24 @@ const ProductsPage = () => {
                   {product.desc}
                 </p>
 
-                <div className="mb-4">
-                  <p className="font-body text-xs font-semibold uppercase tracking-wider text-foreground/70 mb-2">
-                    Available Forms
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {product.items.map((item) => (
-                      <span
-                        key={item}
-                        className="inline-flex items-center gap-1 text-xs font-body font-medium bg-secondary text-secondary-foreground px-2.5 py-1 rounded"
-                      >
-                        <Check className="w-3 h-3 text-accent" />
-                        {item}
-                      </span>
-                    ))}
+                {product.items && product.items.length > 0 && (
+                  <div className="mb-4">
+                    <p className="font-body text-xs font-semibold uppercase tracking-wider text-foreground/70 mb-2">
+                      Available Forms
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {product.items.map((item) => (
+                        <span
+                          key={item}
+                          className="inline-flex items-center gap-1 text-xs font-body font-medium bg-secondary text-secondary-foreground px-2.5 py-1 rounded"
+                        >
+                          <Check className="w-3 h-3 text-accent" />
+                          {item}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {product.variants && (
                   <div className="mb-5 pt-4 border-t border-border">
@@ -225,8 +242,9 @@ const ProductsPage = () => {
                       {product.variants.values.map((v) => (
                         <span
                           key={v}
-                          className="inline-block text-xs font-body font-semibold bg-accent/10 text-accent border border-accent/20 px-2.5 py-1 rounded"
+                          className="inline-flex items-center gap-1 text-xs font-body font-medium bg-secondary text-secondary-foreground px-2.5 py-1 rounded"
                         >
+                          <Check className="w-3 h-3 text-accent" />
                           {v}
                         </span>
                       ))}
