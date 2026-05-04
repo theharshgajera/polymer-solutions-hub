@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 const Footer = () => {
@@ -32,11 +33,17 @@ const Footer = () => {
           <div>
             <h4 className="font-heading text-lg font-bold mb-4">Quick Links</h4>
             <ul className="space-y-2 font-body text-sm">
-              {["Home", "About Us", "Products", "Industries", "Contact Us"].map((link) => (
-                <li key={link}>
-                  <a href={`#${link.toLowerCase().replace(/ /g, "")}`} className="text-primary-foreground/70 hover:text-gold transition-colors">
-                    {link}
-                  </a>
+              {[
+                { label: "Home", to: "/" },
+                { label: "About Us", to: "/about" },
+                { label: "Products", to: "/products" },
+                { label: "Industries", to: "/industries" },
+                { label: "Contact Us", to: "/contact" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className="text-primary-foreground/70 hover:text-gold transition-colors">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
