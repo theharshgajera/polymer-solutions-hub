@@ -207,7 +207,7 @@ const ProductsPage = () => {
 
                 {product.images && <ProductSlideshow images={product.images} />}
 
-                <h3 className="font-heading text-xl font-bold text-foreground mb-2">
+                <h3 className="font-heading text-xl font-bold text-navy mb-2">
                   {product.name}
                 </h3>
                 <p className="font-body text-sm text-muted-foreground leading-relaxed mb-5">

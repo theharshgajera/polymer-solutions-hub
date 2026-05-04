@@ -64,7 +64,7 @@ const Header = () => {
               <li key={link.to}>
                 <Link
                   to={link.to}
-                  className={`font-body font-semibold text-sm tracking-wide uppercase transition-colors ${
+                  className={`font-body font-bold text-sm tracking-wide uppercase transition-colors ${
                     location.pathname === link.to
                       ? "text-accent"
                       : "text-foreground hover:text-accent"
@@ -80,7 +80,7 @@ const Header = () => {
             href="https://wa.me/919898470707?text=Hey%2C%20I%20have%20one%20requirement"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden lg:inline-flex bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-body font-semibold text-sm hover:bg-accent transition-colors"
+            className="hidden lg:inline-flex bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-body font-bold text-sm hover:bg-accent transition-colors"
           >
             Get a Quote
           </a>
@@ -101,7 +101,7 @@ const Header = () => {
                 <li key={link.to}>
                   <Link
                     to={link.to}
-                    className="block py-2 font-body font-semibold text-sm text-foreground hover:text-accent"
+                    className="block py-2 font-body font-bold text-sm text-foreground hover:text-accent"
                     onClick={() => setMobileOpen(false)}
                   >
                     {link.label}
@@ -112,7 +112,7 @@ const Header = () => {
                 href="https://wa.me/919898470707?text=Hey%2C%20I%20have%20one%20requirement"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-body font-semibold text-sm text-center"
+                className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-body font-bold text-sm text-center"
                 onClick={() => setMobileOpen(false)}
               >
                 Get a Quote
