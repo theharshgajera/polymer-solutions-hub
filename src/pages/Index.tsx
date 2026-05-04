@@ -3,16 +3,18 @@ import BannerGallery from "@/components/BannerGallery";
 import HeroSection from "@/components/HeroSection";
 import StatsSection from "@/components/StatsSection";
 import Footer from "@/components/Footer";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Eye, Target, Zap, Shield } from "lucide-react";
+import { ProductSlideshow } from "@/components/ProductSlideshow";
 
-const highlights = [
-  { name: "Nylon Rods & Sheets", desc: "High-strength for machinery parts." },
-  { name: "Cast Nylon", desc: "Superior wear resistance." },
-  { name: "PTFE (Teflon)", desc: "Heat-resistant precision products." },
-  { name: "HDPE Sheets & Rods", desc: "Versatile industrial applications." },
-  { name: "UHMWPE", desc: "Extreme condition performance." },
-  { name: "PEEK", desc: "Premium aerospace-grade polymer." },
+const initialHighlights = [
+  { id: "nylon-6", name: "Nylon Rods & Sheets", desc: "High-strength for machinery parts.", images: [] as string[] },
+  { id: "cast-nylon", name: "Cast Nylon", desc: "Superior wear resistance.", images: [] as string[] },
+  { id: "ptfe", name: "PTFE (Teflon)", desc: "Heat-resistant precision products.", images: [] as string[] },
+  { id: "hdpe", name: "HDPE Sheets & Rods", desc: "Versatile industrial applications.", images: [] as string[] },
+  { id: "uhmwpe", name: "UHMWPE", desc: "Extreme condition performance.", images: [] as string[] },
+  { id: "peek", name: "PEEK", desc: "Premium aerospace-grade polymer.", images: [] as string[] },
 ];
 
 const features = [
@@ -23,6 +25,26 @@ const features = [
 ];
 
 const Index = () => {
+  const [highlights, setHighlights] = useState(initialHighlights);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const promises = initialHighlights.map(async (p) => {
+          const res = await fetch(`/api/images?folder=/products/${p.id}&t=${Date.now()}`);
+          if (!res.ok) return p;
+          const data = await res.json();
+          return { ...p, images: data.map((img: any) => img.url) };
+        });
+        const updated = await Promise.all(promises);
+        setHighlights(updated);
+      } catch (error) {
+        console.error("Error fetching images", error);
+      }
+    };
+    fetchImages();
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -61,13 +83,17 @@ const Index = () => {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {highlights.map((p, i) => (
-              <div key={i} className="group bg-background rounded-xl p-6 shadow-sm hover:shadow-lg border border-border hover:border-accent/30 transition-all hover:-translate-y-1">
-                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary transition-colors">
-                  <div className="w-4 h-4 rounded-sm bg-accent group-hover:bg-primary-foreground transition-colors" />
-                </div>
+              <div key={i} className="group bg-background rounded-xl p-6 shadow-sm hover:shadow-lg border border-border hover:border-accent/30 transition-all hover:-translate-y-1 flex flex-col">
+                {p.images && p.images.length > 0 ? (
+                  <ProductSlideshow images={p.images} />
+                ) : (
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary transition-colors">
+                    <div className="w-4 h-4 rounded-sm bg-accent group-hover:bg-primary-foreground transition-colors" />
+                  </div>
+                )}
                 <h3 className="font-heading text-lg font-bold text-foreground mb-2">{p.name}</h3>
                 <p className="font-body text-sm text-muted-foreground mb-4">{p.desc}</p>
-                <Link to="/products" className="inline-flex items-center gap-1 text-accent font-body text-sm font-semibold group-hover:gap-2 transition-all">
+                <Link to="/products" className="mt-auto inline-flex items-center gap-1 text-accent font-body text-sm font-semibold group-hover:gap-2 transition-all">
                   View All <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
