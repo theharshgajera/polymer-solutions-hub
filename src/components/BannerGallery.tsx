@@ -13,13 +13,25 @@ const bannerImages = [banner2, banner3, banner4, banner5, banner6, banner7, bann
 
 const BannerGallery = () => {
   const [currentStartIndex, setCurrentStartIndex] = useState(0);
+  const [stepSize, setStepSize] = useState(1);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1536) setStepSize(3);
+      else if (window.innerWidth >= 768) setStepSize(2);
+      else setStepSize(1);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentStartIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
+      setCurrentStartIndex((prevIndex) => (prevIndex + stepSize) % bannerImages.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [stepSize]);
 
   const getVisibleImages = () => {
     return [
@@ -30,6 +42,12 @@ const BannerGallery = () => {
   };
 
   const visibleImages = getVisibleImages();
+  
+  // Calculate dots based on step size
+  const dots = [];
+  for (let i = 0; i < bannerImages.length; i += stepSize) {
+    dots.push(i);
+  }
 
   return (
     <section className="pt-32 lg:pt-44 bg-slate-light/30">
@@ -55,16 +73,16 @@ const BannerGallery = () => {
 
         {/* Carousel Indicators */}
         <div className="flex justify-center gap-3 mt-10">
-          {bannerImages.map((_, index) => (
+          {dots.map((dotIndex) => (
             <button
-              key={index}
-              onClick={() => setCurrentStartIndex(index)}
+              key={dotIndex}
+              onClick={() => setCurrentStartIndex(dotIndex)}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                index === currentStartIndex 
+                currentStartIndex >= dotIndex && currentStartIndex < dotIndex + stepSize
                   ? "bg-gold w-8" 
                   : "bg-navy/20 hover:bg-navy/40"
               }`}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={`Go to page ${Math.floor(dotIndex / stepSize) + 1}`}
             />
           ))}
         </div>
