@@ -32,9 +32,9 @@ const AboutPage = () => {
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary/10 rounded-full" />
             </div>
             <div>
-              <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-6">Multi-Tech Polymers</h2>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-6">Multi-Tech</h2>
               <p className="font-body text-muted-foreground leading-relaxed mb-4">
-                We at <strong className="text-navy">Multi-Tech Polymers</strong> are a foremost manufacturer and supplier of quality-approved engineering plastics parts, rods, and sheets. Our products include Nylon, Cast Nylon, PTFE (Teflon), HDPE, PP, UHMWPE, Delrin, PU, PEEK, and more.
+                We at <strong className="text-navy">Multi-Tech</strong> are a foremost manufacturer and supplier of quality-approved engineering plastics parts, rods, and sheets. Our products include Nylon, Cast Nylon, PTFE (Teflon), HDPE, PP, UHMWPE, Delrin, PU, PEEK, and more.
               </p>
               <p className="font-body text-muted-foreground leading-relaxed mb-4">
                 Our hard work and determination have earned us accolades for quality supplying of all types of engineering plastics parts to various industries including automotive, aerospace, pharmaceutical, food processing, and many more.
