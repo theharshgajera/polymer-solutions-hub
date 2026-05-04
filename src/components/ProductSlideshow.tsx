@@ -24,7 +24,7 @@ export function ProductSlideshow({ images }: ProductSlideshowProps) {
 
   if (!images || images.length === 0) {
     return (
-      <div className="w-full h-48 bg-muted flex items-center justify-center rounded-xl mb-6">
+      <div className="w-full aspect-square bg-muted flex items-center justify-center rounded-xl mb-6">
         <span className="text-muted-foreground text-sm font-body">No image available</span>
       </div>
     );
@@ -32,7 +32,7 @@ export function ProductSlideshow({ images }: ProductSlideshowProps) {
 
   return (
     <div 
-      className="relative w-full h-48 mb-6 rounded-xl overflow-hidden group/slideshow shadow-inner bg-muted"
+      className="relative w-full aspect-square mb-6 rounded-xl overflow-hidden group/slideshow shadow-inner bg-muted"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
