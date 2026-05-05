@@ -7,10 +7,10 @@ const ContactSection = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { name, email, phone, message } = formData;
-    
+
     const whatsappMessage = `*New Enquiry*\n\n*Name:* ${name}\n*Email:* ${email}\n*Phone:* ${phone}\n*Message:* ${message}`;
     const whatsappUrl = `https://wa.me/919898470707?text=${encodeURIComponent(whatsappMessage)}`;
-    
+
     window.open(whatsappUrl, "_blank");
     setFormData({ name: "", email: "", phone: "", message: "" });
   };
@@ -41,7 +41,7 @@ const ContactSection = () => {
               {[
                 { icon: Phone, label: "+91 98984 70707", href: "tel:+919898470707" },
                 { icon: Mail, label: "multitech9@rediffmail.com", href: "mailto:multitech9@rediffmail.com" },
-                { icon: MapPin, label: "3, Gayatri Chamber, Near Gravity Estate, Kevalkanta Ajodh Dairy Road, Rakhial, Ahmedabad, 380023", href: "#" },
+                { icon: MapPin, label: "3, Gayatri Chamber, Near Gravity Estate, Kevalkanta Ajod Dairy Road, Rakhial, Ahmedabad, 380023", href: "#" },
               ].map((item, i) => (
                 <a key={i} href={item.href} className="flex items-center gap-4 group">
                   <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition-colors">
