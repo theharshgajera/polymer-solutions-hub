@@ -8,11 +8,10 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-14">
         <div className="grid md:grid-cols-3 gap-10">
           <div>
-            <img src={logo} alt="Multi-Tech Polymers" className="h-16 w-auto mb-4 brightness-200" />
-            <p className="font-body text-base text-primary-foreground/70 leading-relaxed mb-3">
+            <p className="font-body text-lg text-primary-foreground/70 leading-relaxed mb-3">
               Leading manufacturer & supplier of engineering plastics rods, sheets, and machined components for diverse industrial applications.
             </p>
-            <p className="font-body text-base text-primary-foreground/70 mb-6">
+            <p className="font-body text-lg text-primary-foreground/70 mb-6">
               <span className="text-gold font-semibold">GST: </span>
               <span className="tracking-wide">24AOOPP6539H1ZH</span>
             </p>
@@ -35,8 +34,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-heading text-xl font-bold mb-4">Quick Links</h4>
-            <ul className="space-y-3 font-body text-base">
+            <h4 className="font-heading text-2xl font-bold mb-4">Quick Links</h4>
+            <ul className="space-y-3 font-body text-lg">
               {[
                 { label: "Home", to: "/" },
                 { label: "About Us", to: "/about" },
@@ -54,8 +53,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-heading text-xl font-bold mb-4">Contact Info</h4>
-            <div className="space-y-4 font-body text-base text-primary-foreground/70">
+            <h4 className="font-heading text-2xl font-bold mb-4">Contact Info</h4>
+            <div className="space-y-4 font-body text-lg text-primary-foreground/70">
               <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-gold" />
                 <span>+91 98984 70707</span>
@@ -73,7 +72,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="border-t border-primary-foreground/10 py-5">
-        <p className="text-center font-body text-sm text-primary-foreground/50">
+        <p className="text-center font-body text-base text-primary-foreground/50">
           © {new Date().getFullYear()} Multi-Tech Polymers. All Rights Reserved.
         </p>
       </div>
