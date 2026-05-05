@@ -67,6 +67,7 @@ export default {
       fontFamily: {
         heading: ['Playfair Display', 'serif'],
         body: ['Open Sans', 'sans-serif'],
+        gloucester: ['Gloucester Pro Bold Condensed', 'GloucesterMT Extra Condensed', 'Gloucester MT Extra Condensed', 'Century', 'serif'],
       },
       borderRadius: {
         lg: "var(--radius)",

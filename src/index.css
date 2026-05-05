@@ -70,6 +70,11 @@
 }
 
 @layer utilities {
+  .font-gloucester {
+    font-family: 'Gloucester Pro Bold Condensed', 'GloucesterMT Extra Condensed', 'Gloucester MT Extra Condensed', 'Century', 'Times New Roman', serif;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+  }
   .bg-navy {
     background-color: hsl(var(--navy));
   }

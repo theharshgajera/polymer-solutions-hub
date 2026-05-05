@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BrandName from "@/components/BrandName";
 import { Eye, Target, Users, Award, CheckCircle } from "lucide-react";
 import aboutImage from "@/assets/about-factory.jpg";
 
@@ -27,21 +28,35 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
-              <img src={aboutImage} alt="Multi-Tech Polymers Factory" width={800} height={600} loading="lazy" className="rounded-2xl shadow-xl w-full h-auto object-cover" />
+              <img src={aboutImage} alt="Multi-Tech Factory" width={800} height={600} loading="lazy" className="rounded-2xl shadow-xl w-full h-auto object-cover" />
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-gold/20 rounded-full" />
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary/10 rounded-full" />
             </div>
             <div>
-              <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-6">Multi-Tech</h2>
-              <p className="font-body text-muted-foreground leading-relaxed mb-4">
-                We at <strong className="text-navy">Multi-Tech</strong> are a foremost manufacturer and supplier of quality-approved engineering plastics parts, rods, and sheets. Our products include Nylon, Cast Nylon, PTFE (Teflon), HDPE, PP, UHMWPE, Delrin, PU, PEEK, and more.
-              </p>
-              <p className="font-body text-muted-foreground leading-relaxed mb-4">
-                Our hard work and determination have earned us accolades for quality supplying of all types of engineering plastics parts to various industries including automotive, aerospace, pharmaceutical, food processing, and many more.
-              </p>
-              <p className="font-body text-muted-foreground leading-relaxed">
-                Our full-line manufacturing capabilities enable us to produce any stock shape you require. For even greater savings and quicker turnarounds, we also create finished and semi-finished cast components tailored to your exact specifications.
-              </p>
+              <h2 className="font-gloucester text-3xl md:text-4xl font-bold text-foreground mb-6"><BrandName /></h2>
+              <ul className="font-gloucester text-muted-foreground leading-relaxed space-y-3 list-disc list-outside ml-5">
+                <li>
+                  <BrandName /> is a leading and most reliable supplier of Virgin and Compound Graded PTFE/Teflon<sup>®</sup> and other engineering polymers like Polyacetal (Delrin<sup>®</sup>), Polyamide (Nylon<sup>®</sup>), Cast Nylon, HDPE, UHMWPE, Polypropylene (PP), Polyurethane (PU), Rigid PVC, PEEK, Turcite Sheet etc.
+                </li>
+                <li>
+                  Moulded &amp; Modified components are available in form of Sheet, Rod, Bush, Strips, Rings, Gaskets, Bellows etc. Most of the parts are manufactured &amp; developed as per customer specification.
+                </li>
+                <li>
+                  Company has been promoted by <strong className="text-navy">Mr. Pravinbhai S. Panchal</strong>. Company established in year <strong className="text-navy">2006</strong> in Ahmedabad.
+                </li>
+                <li>
+                  We offer engineering polymer components in Chemical, Petrochemical, Textile, Pharmaceuticals, Fertilizers, Paper Mills, Hydraulics, Valves &amp; Pumps manufacturing industries &amp; several other industries.
+                </li>
+                <li>
+                  Characteristics of the materials are Low Friction, Outstanding stability for High Temperature, Chemical Resistance and Dielectric Properties.
+                </li>
+                <li>
+                  <BrandName /> is equipped with the most modern machineries &amp; high tech measuring instruments. Our skilled machinists have the knowledge and experience to fabricate engineering plastics components. Our motto is to achieve maximum customer satisfaction through consistent quality at reasonable rates.
+                </li>
+                <li>
+                  The success &amp; growth of the company is largely due to its committed employees, technical strength &amp; patronage of valued customers.
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -51,23 +66,27 @@ const AboutPage = () => {
       <section className="py-20 bg-slate-light">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-            <div className="bg-background rounded-2xl p-8 shadow-sm border border-border">
-              <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-5">
-                <Eye className="w-7 h-7 text-accent" />
-              </div>
-              <h3 className="font-heading text-2xl font-bold text-foreground mb-4">Our Vision</h3>
-              <p className="font-body text-muted-foreground leading-relaxed">
-                To establish ourselves as the go-to source for engineering plastics sheet & rod in important sectors like food processing and packaging, material handling, sugar, steel and iron processing, textiles, and pharmaceuticals.
-              </p>
-            </div>
+            {/* Mission - shown first */}
             <div className="bg-background rounded-2xl p-8 shadow-sm border border-border">
               <div className="w-14 h-14 bg-gold/10 rounded-full flex items-center justify-center mb-5">
                 <Target className="w-7 h-7 text-gold" />
               </div>
-              <h3 className="font-heading text-2xl font-bold text-foreground mb-4">Our Mission</h3>
-              <p className="font-body text-muted-foreground leading-relaxed">
-                Serve the client with the quickest turnaround time feasible. On-time and complete delivery is provided. Establish a workplace culture that values teamwork, honesty, and integrity.
+              <h3 className="font-gloucester text-2xl font-bold text-foreground mb-4">Our Mission</h3>
+              <p className="font-gloucester text-muted-foreground leading-relaxed">
+                At <BrandName />, our mission is to provide high-quality engineering plastic solutions with reliability, precision, and consistency. We are committed to delivering the right products on time, at competitive prices, while ensuring complete customer satisfaction and long-term partnerships.
               </p>
+            </div>
+            {/* Vision */}
+            <div className="bg-background rounded-2xl p-8 shadow-sm border border-border">
+              <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-5">
+                <Eye className="w-7 h-7 text-accent" />
+              </div>
+              <h3 className="font-gloucester text-2xl font-bold text-foreground mb-4">Our Vision</h3>
+              <ul className="font-gloucester text-muted-foreground leading-relaxed space-y-2 list-disc list-outside ml-4">
+                <li>At <BrandName />, our vision is to be a trusted leader in engineering plastic solutions by delivering quality, innovation, and long-term value to our customers.</li>
+                <li>We aim to grow with advanced technology and continuously improve our products and services.</li>
+                <li>Our focus is on building strong relationships through trust, reliability, and consistent performance.</li>
+              </ul>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import heroImage1 from "@/assets/hero-products.jpg";
 import heroImage2 from "@/assets/hero-slider-1.webp";
 import heroImage3 from "@/assets/hero-slider-2.webp";
@@ -34,18 +35,18 @@ const HeroSection = () => {
               Leading manufacturer and supplier of premium quality engineering plastics — Nylon, Cast Nylon, PTFE, HDPE, PP, UHMWPE, Delrin, PU, PEEK and more. Precision-engineered for demanding industrial applications.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a
-                href="#products"
+              <Link
+                to="/products"
                 className="bg-gold text-foreground px-8 py-3.5 rounded-md font-body font-bold text-sm hover:opacity-90 transition-opacity"
               >
                 View Products
-              </a>
-              <a
-                href="#contact"
+              </Link>
+              <Link
+                to="/contact"
                 className="border-2 border-primary-foreground/30 text-primary-foreground px-8 py-3.5 rounded-md font-body font-semibold text-sm hover:bg-primary-foreground/10 transition-colors"
               >
                 Contact Us
-              </a>
+              </Link>
             </div>
           </div>
 
