@@ -1,6 +1,6 @@
 import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import BrandName from "@/components/BrandName";
 
 const Footer = () => {
   return (
@@ -8,6 +8,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-14">
         <div className="grid md:grid-cols-3 gap-10">
           <div>
+            <h3 className="text-4xl text-white mb-4"><BrandName /></h3>
             <p className="font-body text-lg text-primary-foreground/70 leading-relaxed mb-3">
               Leading manufacturer & supplier of engineering plastics rods, sheets, and machined components for diverse industrial applications.
             </p>
