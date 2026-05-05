@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import BrandName from "@/components/BrandName";
 import heroImage1 from "@/assets/hero-products.jpg";
 import heroImage2 from "@/assets/hero-slider-1.webp";
 import heroImage3 from "@/assets/hero-slider-2.webp";
@@ -26,7 +27,7 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in-up order-2 lg:order-1">
             <p className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-gold mb-4">
-              Welcome to Multi-Tech
+              Welcome to <BrandName />
             </p>
             <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-gold leading-tight mb-6">
               House of Engineering Plastics Products in form of Sheets, Rods & Bushes
