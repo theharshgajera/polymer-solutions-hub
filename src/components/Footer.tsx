@@ -9,8 +9,12 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-10">
           <div>
             <img src={logo} alt="Multi-Tech Polymers" className="h-16 w-auto mb-4 brightness-200" />
-            <p className="font-body text-sm text-primary-foreground/70 leading-relaxed mb-6">
+            <p className="font-body text-sm text-primary-foreground/70 leading-relaxed mb-3">
               Leading manufacturer & supplier of engineering plastics rods, sheets, and machined components for diverse industrial applications.
+            </p>
+            <p className="font-body text-sm text-primary-foreground/70 mb-6">
+              <span className="text-gold font-semibold">GST: </span>
+              <span className="tracking-wide">24AOOPP6539H1ZH</span>
             </p>
             <div className="flex gap-4">
               {/* WhatsApp */}
