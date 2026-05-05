@@ -42,7 +42,7 @@ const AboutPage = () => {
                   Moulded &amp; Modified components are available in form of Sheet, Rod, Bush, Strips, Rings, Gaskets, Bellows etc. Most of the parts are manufactured &amp; developed as per customer specification.
                 </li>
                 <li>
-                  Company has been promoted by <strong className="text-navy">Mr. Pravinbhai S. Panchal</strong>. Company established in year <strong className="text-navy">2006</strong> in Ahmedabad.
+                  Company has been promoted by <strong className="text-navy">Mr. Ritesh Panchal</strong>. Company established in year <strong className="text-navy">2006</strong> in Ahmedabad.
                 </li>
                 <li>
                   We offer engineering polymer components in Chemical, Petrochemical, Textile, Pharmaceuticals, Fertilizers, Paper Mills, Hydraulics, Valves &amp; Pumps manufacturing industries &amp; several other industries.
