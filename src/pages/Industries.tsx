@@ -1,5 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
+import { breadcrumbSchema } from "@/lib/seo";
 import { Link } from "react-router-dom";
 import {
   Zap, Pill, Settings, Droplets, UtensilsCrossed,
@@ -24,6 +26,16 @@ const industries = [
 const IndustriesPage = () => {
   return (
     <div className="min-h-screen">
+      <Seo
+        title="Industries We Serve | Engineering Plastics Supplier in Ahmedabad, Gujarat"
+        description="Multi-Tech Polymers supplies engineering plastics to chemical, petrochemical, pharmaceutical, textile, automotive, aerospace, food processing, valves, hydraulics and machine tool industries across Ahmedabad, Gujarat and India."
+        path="/industries"
+        keywords="engineering plastics for chemical industry, PTFE for valves, plastics for pharmaceutical industry Ahmedabad, industrial polymers Gujarat"
+        schema={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Industries", path: "/industries" },
+        ])}
+      />
       <Header />
 
       <section className="gradient-hero pt-40 pb-8">

@@ -1,5 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
+import { breadcrumbSchema, OG_IMAGE, SITE_NAME, absoluteUrl } from "@/lib/seo";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Loader2, AlertCircle, ArrowLeft, Newspaper } from "lucide-react";
@@ -20,8 +22,41 @@ const BlogDetailPage = () => {
       .finally(() => setIsLoading(false));
   }, [id]);
 
+  const metaDescription = blog
+    ? (blog.text || `${blog.heading} — read more on the Multi-Tech Polymers blog.`).slice(0, 160)
+    : "";
+
   return (
     <div className="min-h-screen">
+      {blog && (
+        <Seo
+          title={`${blog.heading} | ${SITE_NAME} Blog`}
+          description={metaDescription}
+          path={`/blogs/${blog._id}`}
+          keywords={(blog.tags || []).join(", ")}
+          image={blog.image || OG_IMAGE}
+          type="article"
+          schema={[
+            {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: blog.heading,
+              image: blog.image ? [blog.image] : [OG_IMAGE],
+              datePublished: blog.createdAt,
+              dateModified: blog.updatedAt,
+              keywords: (blog.tags || []).join(", "),
+              author: { "@type": "Organization", name: SITE_NAME },
+              publisher: { "@id": "https://multitechpolymers.in/#business" },
+              mainEntityOfPage: absoluteUrl(`/blogs/${blog._id}`),
+            },
+            breadcrumbSchema([
+              { name: "Home", path: "/" },
+              { name: "Blogs", path: "/blogs" },
+              { name: blog.heading, path: `/blogs/${blog._id}` },
+            ]),
+          ]}
+        />
+      )}
       <Header />
 
       <section className="pt-32 pb-20 bg-background min-h-[60vh]">

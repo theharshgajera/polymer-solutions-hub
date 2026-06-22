@@ -29,11 +29,11 @@ const HeroSection = () => {
             <p className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-gold mb-4">
               Welcome to <BrandName />
             </p>
-            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-gold leading-tight mb-6">
-              House of Engineering Plastics Products in form of Sheets, Rods & Bushes
-            </h2>
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-gold leading-tight mb-6">
+              House of Engineering Plastics — PTFE, Teflon, Nylon Sheets, Rods &amp; Bushes in Ahmedabad
+            </h1>
             <p className="font-body text-primary-foreground/80 text-lg leading-relaxed mb-8 max-w-xl">
-              Leading manufacturer and supplier of premium quality engineering plastics — Nylon, Cast Nylon, PTFE, HDPE, PP, UHMWPE, Delrin, PU, PEEK and more. Precision-engineered for demanding industrial applications.
+              Leading manufacturer and supplier of premium quality engineering plastics in Ahmedabad, Gujarat — PTFE (Teflon), Nylon, Cast Nylon, HDPE, PP, UHMWPE, Delrin, POM, PU, PEEK and more. Precision-engineered for demanding industrial applications across India.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link

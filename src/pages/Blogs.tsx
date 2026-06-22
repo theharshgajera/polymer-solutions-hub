@@ -1,5 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
+import { breadcrumbSchema } from "@/lib/seo";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Loader2, AlertCircle, ArrowRight, Newspaper } from "lucide-react";
@@ -19,6 +21,16 @@ const BlogsPage = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo
+        title="Blogs & Resources | Engineering Plastics Guides | Multi-Tech Polymers"
+        description="Read guides and articles on PTFE, Teflon, Nylon, Delrin, PEEK and engineering plastics — material selection, applications and industry tips from Multi-Tech Polymers, Ahmedabad."
+        path="/blogs"
+        keywords="engineering plastics blog, PTFE guide, Teflon vs Nylon, polymer material selection, Multi-Tech Polymers resources"
+        schema={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Blogs", path: "/blogs" },
+        ])}
+      />
       <Header />
 
       {/* Banner */}

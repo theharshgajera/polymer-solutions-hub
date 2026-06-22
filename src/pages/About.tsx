@@ -1,6 +1,8 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BrandName from "@/components/BrandName";
+import Seo from "@/components/Seo";
+import { breadcrumbSchema } from "@/lib/seo";
 import { Eye, Target, Users, Award, CheckCircle } from "lucide-react";
 import aboutImage from "@/assets/about-factory.jpg";
 
@@ -13,6 +15,16 @@ const values = [
 const AboutPage = () => {
   return (
     <div className="min-h-screen">
+      <Seo
+        title="About Multi-Tech Polymers | Engineering Plastics Manufacturer in Ahmedabad"
+        description="Established in 2006 in Ahmedabad, Multi-Tech Polymers is a leading supplier of PTFE/Teflon and engineering polymers — Nylon, Cast Nylon, HDPE, UHMWPE, PP, PU, PEEK, Delrin and more — serving industries across Gujarat and India."
+        path="/about"
+        keywords="about Multi-Tech Polymers, engineering plastics company Ahmedabad, PTFE manufacturer Gujarat, polymer supplier Ahmedabad"
+        schema={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "About Us", path: "/about" },
+        ])}
+      />
       <Header />
 
       {/* Banner */}

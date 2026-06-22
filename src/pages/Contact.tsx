@@ -1,10 +1,25 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ContactSection from "@/components/ContactSection";
+import Seo from "@/components/Seo";
+import { breadcrumbSchema, localBusinessSchema } from "@/lib/seo";
 
 const ContactPage = () => {
   return (
     <div className="min-h-screen">
+      <Seo
+        title="Contact Multi-Tech Polymers | PTFE & Engineering Plastics in Ahmedabad"
+        description="Contact Multi-Tech Polymers for PTFE, Teflon, Nylon, Delrin, PEEK & engineering plastics in Ahmedabad, Gujarat. Call +91 98984 70707 or visit us at Rakhial, Ahmedabad 380023. Get a free quote."
+        path="/contact"
+        keywords="contact PTFE manufacturer Ahmedabad, engineering plastics supplier near me, Multi-Tech Polymers address, plastic rod sheet supplier Gujarat"
+        schema={[
+          localBusinessSchema(),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Contact Us", path: "/contact" },
+          ]),
+        ]}
+      />
       <Header />
 
       <section className="gradient-hero pt-40 pb-8">

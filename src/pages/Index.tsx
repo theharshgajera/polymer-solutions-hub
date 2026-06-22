@@ -3,10 +3,14 @@ import BannerGallery from "@/components/BannerGallery";
 import HeroSection from "@/components/HeroSection";
 import StatsSection from "@/components/StatsSection";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
+import BrandName from "@/components/BrandName";
+import FaqSection, { type Faq } from "@/components/FaqSection";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Eye, Target, Zap, Shield } from "lucide-react";
 import { ProductSlideshow } from "@/components/ProductSlideshow";
+import { faqSchema, localBusinessSchema, websiteSchema } from "@/lib/seo";
 
 const initialHighlights = [
   { id: "nylon-6", name: "Nylon Rods & Sheets", desc: "High-strength for machinery parts.", images: [] as string[] },
@@ -22,6 +26,25 @@ const features = [
   { icon: Zap, title: "Quick Turnaround", desc: "Fastest delivery in the industry." },
   { icon: Eye, title: "Custom Solutions", desc: "Tailored to your exact specifications." },
   { icon: Target, title: "Precision Machined", desc: "CNC-machined components on demand." },
+];
+
+const homeFaqs: Faq[] = [
+  {
+    q: "Where is Multi-Tech Polymers located?",
+    a: "Multi-Tech Polymers is located at 3, Gayatri Chamber, Near Gravity Estate, Kevalkanta Ajod Dairy Road, Rakhial, Ahmedabad, Gujarat 380023, India. We have been manufacturing engineering plastics since 2006.",
+  },
+  {
+    q: "What engineering plastics does Multi-Tech Polymers supply?",
+    a: "We manufacture and supply PTFE (Teflon), Nylon, Cast Nylon, Delrin (POM), Polypropylene (PP), PEEK, UHMWPE, Polyurethane (PU), HDPE, Rigid PVC, Acrylic and Polycarbonate — in the form of rods, sheets, bushes, gears, wheels, gaskets and custom machined parts.",
+  },
+  {
+    q: "Are you a PTFE and Teflon manufacturer in Ahmedabad?",
+    a: "Yes. We are one of the most reliable PTFE / Teflon manufacturers and suppliers in Ahmedabad, Gujarat, offering virgin and filled-grade PTFE rod, sheet, ring, gasket, T bush and chevron packing sets.",
+  },
+  {
+    q: "Do you offer custom-machined engineering plastic components?",
+    a: "Yes. Most of our parts are machined and developed as per customer drawings and specifications. Share your requirement on WhatsApp or call +91 98984 70707 for a quotation.",
+  },
 ];
 
 const Index = () => {
@@ -47,9 +70,37 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo
+        title="PTFE, Teflon & Nylon Manufacturer in Ahmedabad, Gujarat | Multi-Tech Polymers"
+        description="Multi-Tech Polymers — leading manufacturer & supplier of PTFE (Teflon), Nylon, Cast Nylon, Delrin, PEEK, UHMWPE, PP, PU & HDPE rods, sheets, bushes & machined parts in Ahmedabad, Gujarat, India since 2006. Get a free quote today."
+        path="/"
+        schema={[
+          localBusinessSchema(),
+          websiteSchema(),
+          faqSchema(homeFaqs.map((f) => ({ q: f.q, a: f.a }))),
+        ]}
+      />
       <Header />
       <BannerGallery />
       <HeroSection />
+
+      {/* Intro — keyword & location rich */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-5">
+            Engineering Plastics Manufacturer &amp; Supplier in Ahmedabad, Gujarat
+          </h2>
+          <p className="font-body text-muted-foreground leading-relaxed">
+            <BrandName /> Polymers is a trusted manufacturer and supplier of high-quality engineering
+            plastics in <strong className="text-navy">Ahmedabad, Gujarat</strong>. Since 2006 we have
+            supplied <strong className="text-navy">PTFE (Teflon)</strong>, Nylon, Cast Nylon,
+            Polyamide, Delrin (POM), Polyacetal, Polypropylene (PP), PEEK, UHMWPE, Polyurethane (PU),
+            HDPE, Rigid PVC, Acrylic and Polycarbonate products — including rods, sheets, rings, bushes,
+            gears, wheels, gaskets, chevron packing sets, pistons and fully custom-machined components —
+            to industries across Gujarat and India.
+          </p>
+        </div>
+      </section>
 
       {/* Why Choose Us */}
       <section className="py-20 bg-background">
@@ -106,6 +157,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* FAQ */}
+      <FaqSection faqs={homeFaqs} />
 
       {/* CTA */}
       <section className="gradient-hero py-16">

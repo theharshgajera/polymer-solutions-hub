@@ -291,6 +291,55 @@ app.delete('/api/blogs/:id', requireAdmin, async (req, res) => {
   }
 });
 
+// ---------------------------------------------------------------------------
+// Dynamic sitemap.xml (static pages + blog posts) — defined before static
+// serving so it always wins over any file in /dist or /public.
+// ---------------------------------------------------------------------------
+const SITE_URL = 'https://multitechpolymers.in';
+
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const staticPages = [
+      { loc: '/', priority: '1.0', changefreq: 'weekly' },
+      { loc: '/about', priority: '0.8', changefreq: 'monthly' },
+      { loc: '/products', priority: '0.9', changefreq: 'weekly' },
+      { loc: '/industries', priority: '0.7', changefreq: 'monthly' },
+      { loc: '/blogs', priority: '0.7', changefreq: 'weekly' },
+      { loc: '/contact', priority: '0.6', changefreq: 'monthly' },
+    ];
+
+    let blogs = [];
+    try {
+      blogs = await Blog.find().select('_id updatedAt').sort({ createdAt: -1 });
+    } catch {
+      // DB unavailable — still return the static sitemap
+    }
+
+    const urls = [
+      ...staticPages.map(
+        (p) =>
+          `  <url><loc>${SITE_URL}${p.loc}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>`
+      ),
+      ...blogs.map(
+        (b) =>
+          `  <url><loc>${SITE_URL}/blogs/${b._id}</loc><lastmod>${new Date(
+            b.updatedAt
+          ).toISOString()}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>`
+      ),
+    ];
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join(
+      '\n'
+    )}\n</urlset>`;
+
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    res.status(500).send('Error generating sitemap');
+  }
+});
+
 // 4. Serve the compiled React frontend for production
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
