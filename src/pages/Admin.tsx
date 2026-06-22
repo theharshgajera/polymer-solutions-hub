@@ -1,11 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { rawProducts } from "./Products";
-import { Loader2, Upload, Trash2, LogOut, CheckCircle, AlertCircle } from "lucide-react";
+import { Loader2, Upload, Trash2, LogOut, AlertCircle, ImageIcon, Newspaper } from "lucide-react";
 import { toast } from "sonner";
+import BlogsAdmin from "@/components/BlogsAdmin";
+
+type AdminView = "products" | "blogs";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
+  const [view, setView] = useState<AdminView>("products");
   const [selectedProductId, setSelectedProductId] = useState(rawProducts[0].id);
   const [images, setImages] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,10 +59,10 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && view === "products") {
       fetchImages();
     }
-  }, [selectedProductId, isAuthenticated]);
+  }, [selectedProductId, isAuthenticated, view]);
 
   // Upload image
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,37 +161,62 @@ export default function AdminPage() {
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-navy text-white flex-shrink-0 border-r border-navy-dark overflow-y-auto max-h-screen">
         <div className="p-6">
-          <h2 className="font-heading text-xl font-bold mb-1">ImageKit Admin</h2>
-          <p className="font-body text-xs text-white/50 mb-6">Manage product images</p>
+          <h2 className="font-heading text-xl font-bold mb-1">Admin Panel</h2>
+          <p className="font-body text-xs text-white/50 mb-6">Manage product images & blogs</p>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm font-body mb-8"
+            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm font-body mb-6"
           >
             <LogOut className="w-4 h-4" /> Logout
           </button>
-        </div>
-        <div className="px-4 pb-6">
-          <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3 px-2">Products</p>
+
+          {/* View switcher */}
           <div className="space-y-1">
-            {rawProducts.map((product) => (
-              <button
-                key={product.id}
-                onClick={() => setSelectedProductId(product.id)}
-                className={`w-full text-left px-3 py-2.5 rounded-lg font-body text-sm transition-colors ${
-                  selectedProductId === product.id
-                    ? "bg-gold text-navy font-semibold"
-                    : "text-white/70 hover:bg-white/10"
-                }`}
-              >
-                {product.name}
-              </button>
-            ))}
+            <button
+              onClick={() => setView("products")}
+              className={`w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-lg font-body text-sm transition-colors ${
+                view === "products" ? "bg-white/15 text-white font-semibold" : "text-white/70 hover:bg-white/10"
+              }`}
+            >
+              <ImageIcon className="w-4 h-4" /> Product Images
+            </button>
+            <button
+              onClick={() => setView("blogs")}
+              className={`w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-lg font-body text-sm transition-colors ${
+                view === "blogs" ? "bg-white/15 text-white font-semibold" : "text-white/70 hover:bg-white/10"
+              }`}
+            >
+              <Newspaper className="w-4 h-4" /> Blogs
+            </button>
           </div>
         </div>
+        {view === "products" && (
+          <div className="px-4 pb-6">
+            <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3 px-2">Products</p>
+            <div className="space-y-1">
+              {rawProducts.map((product) => (
+                <button
+                  key={product.id}
+                  onClick={() => setSelectedProductId(product.id)}
+                  className={`w-full text-left px-3 py-2.5 rounded-lg font-body text-sm transition-colors ${
+                    selectedProductId === product.id
+                      ? "bg-gold text-navy font-semibold"
+                      : "text-white/70 hover:bg-white/10"
+                  }`}
+                >
+                  {product.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 p-6 md:p-10 overflow-y-auto max-h-screen">
+        {view === "blogs" ? (
+          <BlogsAdmin />
+        ) : (
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
@@ -269,6 +298,7 @@ export default function AdminPage() {
             )}
           </div>
         </div>
+        )}
       </main>
     </div>
   );

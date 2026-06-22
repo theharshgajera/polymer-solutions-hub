@@ -10,6 +10,8 @@ import About from "./pages/About.tsx";
 import Products from "./pages/Products.tsx";
 import Industries from "./pages/Industries.tsx";
 import Contact from "./pages/Contact.tsx";
+import Blogs from "./pages/Blogs.tsx";
+import BlogDetail from "./pages/BlogDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Admin from "./pages/Admin.tsx";
 import { WhatsAppButton } from "./components/WhatsAppButton.tsx";
@@ -36,6 +38,8 @@ const App = () => (
           <Route path="/products" element={<Products />} />
           <Route path="/industries" element={<Industries />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blogs/:id" element={<BlogDetail />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

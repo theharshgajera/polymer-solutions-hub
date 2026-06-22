@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone, Mail, Facebook, Instagram } from "lucide-react";
+import { Menu, X, Phone, Mail, Facebook, Instagram, ChevronDown } from "lucide-react";
 import logo from "@/assets/logo-new.png";
 import makeInIndia from "@/assets/make-in-india.png";
 
@@ -12,8 +12,17 @@ const navLinks = [
   { label: "Contact Us", to: "/contact" },
 ];
 
+// Dropdown menus (label + sub-links)
+const navMenus = [
+  {
+    label: "Resources",
+    items: [{ label: "Blogs", to: "/blogs" }],
+  },
+];
+
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const location = useLocation();
 
   return (
@@ -75,6 +84,40 @@ const Header = () => {
                 </Link>
               </li>
             ))}
+            {navMenus.map((menu) => {
+              const isActive = menu.items.some((item) => location.pathname.startsWith(item.to));
+              return (
+                <li key={menu.label} className="relative group">
+                  <button
+                    className={`flex items-center gap-1 font-body font-bold text-base tracking-wide uppercase transition-colors ${
+                      isActive ? "text-accent" : "text-foreground hover:text-accent"
+                    }`}
+                  >
+                    {menu.label}
+                    <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+                  </button>
+                  {/* Dropdown */}
+                  <ul className="absolute left-0 top-full pt-3 min-w-[180px] opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 z-50">
+                    <div className="bg-background rounded-lg shadow-xl border border-border py-2 overflow-hidden">
+                      {menu.items.map((item) => (
+                        <li key={item.to}>
+                          <Link
+                            to={item.to}
+                            className={`block px-4 py-2.5 font-body font-semibold text-sm transition-colors ${
+                              location.pathname === item.to
+                                ? "text-accent bg-accent/5"
+                                : "text-foreground hover:text-accent hover:bg-muted"
+                            }`}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </div>
+                  </ul>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="hidden lg:flex items-center gap-6">
@@ -110,6 +153,38 @@ const Header = () => {
                   >
                     {link.label}
                   </Link>
+                </li>
+              ))}
+              {navMenus.map((menu) => (
+                <li key={menu.label}>
+                  <button
+                    className="w-full flex items-center justify-between py-2 font-body font-bold text-base text-foreground hover:text-accent"
+                    onClick={() => setMobileResourcesOpen((o) => !o)}
+                    aria-expanded={mobileResourcesOpen}
+                  >
+                    {menu.label}
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${mobileResourcesOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {mobileResourcesOpen && (
+                    <ul className="pl-4 border-l border-border ml-1 mt-1 space-y-1">
+                      {menu.items.map((item) => (
+                        <li key={item.to}>
+                          <Link
+                            to={item.to}
+                            className="block py-2 font-body font-semibold text-sm text-foreground hover:text-accent"
+                            onClick={() => {
+                              setMobileOpen(false);
+                              setMobileResourcesOpen(false);
+                            }}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
               <a
