@@ -59,7 +59,7 @@ const BlogDetailPage = () => {
       )}
       <Header />
 
-      <section className="pt-32 pb-20 bg-background min-h-[60vh]">
+      <section className="pt-40 md:pt-44 lg:pt-48 pb-20 bg-background min-h-[60vh]">
         <div className="container mx-auto px-4 max-w-3xl">
           <Link
             to="/blogs"
