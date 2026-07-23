@@ -297,12 +297,20 @@ app.delete('/api/blogs/:id', requireAdmin, async (req, res) => {
 // ---------------------------------------------------------------------------
 const SITE_URL = 'https://multitechpolymers.in';
 
+// Individual product page slugs — keep in sync with rawProducts in src/lib/products.ts
+const PRODUCT_SLUGS = [
+  'ptfe', 'cast-nylon', 'pp', 'delrin', 'nylon-6', 'bakelite', 'peek',
+  'uhmwpe', 'turcite', 'pc-roofing', 'polycarbonate', 'acrylic', 'pu',
+  'hdpe', 'rigid-pvc', 'cast-pu', 'pps', 'turbo-fan',
+];
+
 app.get('/sitemap.xml', async (req, res) => {
   try {
     const staticPages = [
       { loc: '/', priority: '1.0', changefreq: 'weekly' },
       { loc: '/about', priority: '0.8', changefreq: 'monthly' },
       { loc: '/products', priority: '0.9', changefreq: 'weekly' },
+      ...PRODUCT_SLUGS.map((slug) => ({ loc: `/products/${slug}`, priority: '0.8', changefreq: 'monthly' })),
       { loc: '/industries', priority: '0.7', changefreq: 'monthly' },
       { loc: '/blogs', priority: '0.7', changefreq: 'weekly' },
       { loc: '/contact', priority: '0.6', changefreq: 'monthly' },

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { rawProducts } from "./Products";
+import { rawProducts } from "@/lib/products";
 import { Loader2, Upload, Trash2, LogOut, AlertCircle, ImageIcon, Newspaper } from "lucide-react";
 import { toast } from "sonner";
 import BlogsAdmin from "@/components/BlogsAdmin";

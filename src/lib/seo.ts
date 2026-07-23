@@ -127,6 +127,42 @@ export const faqSchema = (faqs: { q: string; a: string }[]): Json => ({
   })),
 });
 
+// Single Product — for an individual product page.
+// Note: this business is quote-based (no fixed prices), so no `offers` node is
+// emitted. That keeps the markup valid (an Offer without a price is flagged by
+// Google) while still describing the product entity, brand and manufacturer.
+// When prices become available, add an `offers` object to unlock Shopping /
+// merchant-listing eligibility.
+export const productSchema = (p: {
+  id: string;
+  name: string;
+  desc: string;
+  items?: string[];
+  images?: string[];
+  metaDescription?: string;
+}): Json => ({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${absoluteUrl(`/products/${p.id}`)}#product`,
+  name: p.name,
+  description: p.metaDescription || p.desc,
+  image: p.images && p.images.length ? p.images : [OG_IMAGE],
+  sku: p.id,
+  category: "Engineering Plastics",
+  brand: { "@type": "Brand", name: SITE_NAME },
+  manufacturer: { "@id": `${SITE_URL}/#business` },
+  url: absoluteUrl(`/products/${p.id}`),
+  ...(p.items && p.items.length
+    ? {
+        additionalProperty: p.items.map((i) => ({
+          "@type": "PropertyValue",
+          name: "Available Form",
+          value: i,
+        })),
+      }
+    : {}),
+});
+
 // ItemList of products (for the Products page).
 export const productListSchema = (
   products: { name: string; description: string; path?: string }[]

@@ -8,153 +8,7 @@ import { ProductSlideshow } from "@/components/ProductSlideshow";
 import { useState, useEffect } from "react";
 import { productKeywordGroups } from "@/lib/productKeywords";
 import { breadcrumbSchema, faqSchema, productListSchema } from "@/lib/seo";
-
-export type Product = {
-  id: string;
-  name: string;
-  desc: string;
-  items: string[];
-  variants?: { label: string; values: string[] };
-  images?: string[];
-};
-
-export const rawProducts: Omit<Product, 'images'>[] = [
-  {
-    id: "ptfe",
-    name: "PTFE Material (Teflon)",
-    desc: "Non-stick, heat-resistant fluoropolymer (also known as Teflon) with outstanding chemical inertness and very low friction. Supplied as PTFE/Teflon rod, sheet, ring, gasket, T bush and chevron packing sets in Ahmedabad, Gujarat.",
-    items: ["Rod", "Sheet", "Bush", "T Bush", "Ring", "Gasket", "Chevron Packing Set", "Machined Parts"],
-    variants: {
-      label: "Filled Grades",
-      values: [
-        "Carbon Filled PTFE",
-        "Glass Filled PTFE",
-        "Bronze Filled PTFE",
-        "SS Filled PTFE",
-        "PEEK Filled PTFE",
-      ],
-    },
-  },
-  {
-    id: "cast-nylon",
-    name: "Cast Nylon Material (Polyamide)",
-    desc: "Superior wear resistance and mechanical properties. Cast Nylon (Polyamide) rod, sheet, gear, TED, pad and machined parts ideal for heavy-duty industrial use with excellent dimensional stability.",
-    items: ["Rod", "Sheet", "Pipe", "Gear", "TED", "Pad", "Pulley", "Machined Parts", "Customized Parts"],
-    variants: {
-      label: "Grades",
-      values: ["MC 901", "Oilon (Green)", "MOS₂ Cast Nylon"],
-    },
-  },
-  {
-    id: "pp",
-    name: "Polypropylene Material (PP)",
-    desc: "Excellent chemical resistance, lightweight, and cost-effective. Suitable for chemical tanks, ducts, and process equipment.",
-    items: ["Rod", "Sheet", "Pipe", "Flange", "Machined Parts"],
-  },
-  {
-    id: "delrin",
-    name: "Delrin (POM – Polyacetal)",
-    desc: "High stiffness, low friction engineering plastic. Delrin / POM / Polyacetal rod and sheet with excellent dimensional stability and fatigue resistance for precision machined parts.",
-    items: ["Rod", "Sheet", "Machined Parts"],
-  },
-  {
-    id: "nylon-6",
-    name: "Nylon 6 (Polyamide 6)",
-    desc: "High-strength extruded polyamide with great mechanical strength and abrasion resistance.",
-    items: ["Rod"],
-  },
-  {
-    id: "bakelite",
-    name: "Bakelite (Hylam)",
-    desc: "Laminated phenolic material with high electrical insulation and mechanical strength for electrical applications.",
-    items: ["Sheet", "Rod"],
-  },
-  {
-    id: "peek",
-    name: "PEEK",
-    desc: "Premium high-performance polymer for aerospace, medical, and extreme temperature applications up to 260°C.",
-    items: ["Rod", "Sheet", "Machined Parts"],
-  },
-  {
-    id: "uhmwpe",
-    name: "UHMWPE",
-    desc: "Ultra-high molecular weight polyethylene with extreme abrasion resistance, low friction, and outstanding impact strength.",
-    items: ["Rod", "Sheet", "Machined Parts"],
-  },
-  {
-    id: "turcite",
-    name: "Turcite",
-    desc: "PTFE-based bearing material providing low friction, stick-slip free movement for machine tool slideways.",
-    items: ["Sheet"],
-  },
-  {
-    id: "pc-roofing",
-    name: "Polycarbonate Roofing Sheet",
-    desc: "Turbo / generic polycarbonate roofing sheets — impact resistant, weatherproof and lightweight roofing solution.",
-    items: ["Roofing Sheet"],
-  },
-  {
-    id: "polycarbonate",
-    name: "Polycarbonate Sheet",
-    desc: "Impact-resistant, optically clear engineering plastic — 250x stronger than glass with excellent transparency.",
-    items: ["Sheet"],
-  },
-  {
-    id: "acrylic",
-    name: "Acrylic Sheet & Rod",
-    desc: "Crystal-clear, weather-resistant acrylic sheet and rod ideal for displays, signage and glazing applications.",
-    items: ["Sheet", "Rod"],
-  },
-  {
-    id: "pu",
-    name: "Polyurethane (PU)",
-    desc: "Outstanding abrasion resistance, high load-bearing capacity, and excellent resilience for industrial rollers, wheels and seals.",
-    items: ["Rod", "Sheet", "Bush", "Wheel", "Trolley Wheel", "Stecker Wheel"],
-  },
-  {
-    id: "hdpe",
-    name: "HDPE",
-    desc: "High density polyethylene for versatile industrial applications. HDPE sheet, rod, pipe and machined parts — chemical resistant with FDA compliant grades available.",
-    items: ["Rod", "Sheet", "Pipe", "Machined Parts"],
-  },
-  {
-    id: "rigid-pvc",
-    name: "Rigid PVC",
-    desc: "Cost-effective, chemically resistant rigid PVC for chemical processing, fabrication and construction applications.",
-    items: ["Sheet", "Rod"],
-  },
-  {
-    id: "cast-pu",
-    name: "Cast Polyurethane",
-    desc: "Cast PU with excellent tear strength, abrasion resistance and load-bearing capability for custom industrial parts.",
-    items: ["Custom Cast Parts"],
-  },
-  {
-    id: "pps",
-    name: "PPS Piston",
-    desc: "High-performance engineering thermoplastic pistons with exceptional thermal stability and chemical resistance — PPS piston, PEEK piston and icecream machine piston.",
-    items: ["Piston"],
-    variants: {
-      label: "Piston Types",
-      values: ["PPS Piston", "PEEK Piston", "Icecream Machine Piston"],
-    },
-  },
-  {
-    id: "turbo-fan",
-    name: "High Performance Turbo Fan",
-    desc: "Industrial-grade turbo fan with a heavy-duty plastic body. Designed for powerful airflow, energy efficiency, and low-noise, long-lasting performance.",
-    items: [],
-    variants: {
-      label: "Features",
-      values: [
-        "High Speed Air Delivery",
-        "Energy Efficient Design",
-        "Low Noise Operation",
-        "Bulk Supply Available"
-      ],
-    },
-  },
-];
+import { rawProducts, type Product } from "@/lib/products";
 
 const productFaqs: Faq[] = [
   {
@@ -189,8 +43,8 @@ const ProductsPage = () => {
         const promises = rawProducts.map(async (p) => {
           const res = await fetch(`/api/images?folder=/products/${p.id}&t=${Date.now()}`);
           if (!res.ok) return { ...p, images: [] };
-          const data = await res.json();
-          return { ...p, images: data.map((img: any) => img.url) };
+          const data: { url: string }[] = await res.json();
+          return { ...p, images: data.map((img) => img.url) };
         });
         const updatedProducts = await Promise.all(promises);
         setProducts(updatedProducts);
@@ -253,7 +107,9 @@ const ProductsPage = () => {
                 {product.images && <ProductSlideshow images={product.images} />}
 
                 <h3 className="font-heading text-xl font-bold text-navy mb-2">
-                  {product.name}
+                  <Link to={`/products/${product.id}`} className="hover:text-accent transition-colors">
+                    {product.name}
+                  </Link>
                 </h3>
                 <p className="font-body text-sm text-muted-foreground leading-relaxed mb-5">
                   {product.desc}
@@ -297,14 +153,12 @@ const ProductsPage = () => {
                   </div>
                 )}
 
-                <a
-                  href={`https://wa.me/919898470707?text=${encodeURIComponent(`Hey, I have one requirement regarding ${product.name}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to={`/products/${product.id}`}
                   className="mt-auto inline-flex items-center gap-1 text-accent font-body text-sm font-semibold group-hover:gap-2 transition-all"
                 >
-                  Enquire Now <ArrowRight className="w-4 h-4" />
-                </a>
+                  View Details <ArrowRight className="w-4 h-4" />
+                </Link>
               </article>
             ))}
           </div>
