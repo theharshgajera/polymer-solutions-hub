@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Multi-Tech Polymers brand mark: navy pentagon with white "MT" -->
+  <polygon points="50,5 95,38 78,92 22,92 5,38" fill="#2b2a67"/>
+  <g fill="none" stroke="#ffffff" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="butt">
+    <!-- M -->
+    <polyline points="24,69 24,42 38,57 52,42 52,69"/>
+    <!-- T stem -->
+    <line x1="64" y1="44" x2="64" y2="69"/>
+  </g>
+  <!-- T bar -->
+  <rect x="54" y="41" width="20" height="7" fill="#ffffff"/>
+</svg>
