@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import Seo from "@/components/Seo";
 import BrandName from "@/components/BrandName";
 import FaqSection, { type Faq } from "@/components/FaqSection";
+import GoogleReviewsSection from "@/components/GoogleReviewsSection";
+import { getFeaturedGoogleReviews } from "@/lib/googleReviews";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Eye, Target, Zap, Shield } from "lucide-react";
@@ -165,6 +167,13 @@ const Index = () => {
       </section>
 
       {/* FAQ */}
+      {/* Verified Google Business Profile reviews — display only, no schema */}
+      <GoogleReviewsSection
+        reviews={getFeaturedGoogleReviews(6)}
+        heading="Trusted by Engineering Firms Across Gujarat"
+        className="bg-background"
+      />
+
       <FaqSection faqs={homeFaqs} />
 
       {/* CTA */}

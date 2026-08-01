@@ -2,10 +2,15 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Seo from "@/components/Seo";
 import FaqSection from "@/components/FaqSection";
+import ReviewsSection from "@/components/ReviewsSection";
+import GoogleReviewsSection from "@/components/GoogleReviewsSection";
+import { getGoogleReviewsFor } from "@/lib/googleReviews";
 import { ProductSlideshow } from "@/components/ProductSlideshow";
 import { breadcrumbSchema, clampDescription, faqSchema, productSchema, SITE_NAME } from "@/lib/seo";
 import { getProductBySlug, rawProducts, type Product } from "@/lib/products";
 import { getProductSeo, SPEC_DISCLAIMER } from "@/lib/productSeo";
+import { getAggregateRating, getProductReviews } from "@/lib/productReviews";
+import { formatPrice, getProductPricing } from "@/lib/productPricing";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ArrowRight, ArrowLeft, Check, Phone, MessageCircle, AlertCircle } from "lucide-react";
@@ -79,6 +84,12 @@ const ProductDetailPage = () => {
   const keywords = seo?.keywords || `${p.name}, ${p.items.join(", ")}, engineering plastics Ahmedabad, Gujarat`;
   const enquireHref = `${WHATSAPP_BASE}${encodeURIComponent(`Hey, I have a requirement regarding ${p.name}`)}`;
 
+  // Reviews and pricing are only present when real data backs them, so the
+  // page section and the JSON-LD appear or disappear together.
+  const reviews = getProductReviews(p.id);
+  const aggregate = getAggregateRating(p.id);
+  const pricing = getProductPricing(p.id);
+
   // Hand-picked related materials where defined, so the internal links point at
   // genuine alternatives rather than whatever happens to be first in the list.
   const curatedRelated = (seo?.related ?? [])
@@ -107,6 +118,9 @@ const ProductDetailPage = () => {
             alsoKnownAs: seo?.alsoKnownAs,
             specs: seo?.specs,
             keywords,
+            pricing,
+            reviews,
+            aggregateRating: aggregate,
           }),
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -154,6 +168,17 @@ const ProductDetailPage = () => {
                   <span className="font-semibold text-foreground/80">Also known as:</span>{" "}
                   {seo.alsoKnownAs.join(" · ")}
                 </p>
+              )}
+
+              {pricing && (
+                <div className="mb-6">
+                  <p className="font-heading text-2xl font-bold text-navy">
+                    {formatPrice(pricing)}
+                  </p>
+                  <p className="font-body text-xs text-muted-foreground mt-1">
+                    Indicative price — final quotation depends on grade, size and quantity.
+                  </p>
+                </div>
               )}
 
               {p.items.length > 0 && (
@@ -307,6 +332,17 @@ const ProductDetailPage = () => {
           </div>
         </section>
       )}
+
+      {/* First-party reviews — kept in sync with the Review JSON-LD above */}
+      <ReviewsSection reviews={reviews} aggregate={aggregate} productName={p.name} />
+
+      {/* Google Business Profile reviews that mention this material.
+          Displayed only — no schema, see GoogleReviewsSection. */}
+      <GoogleReviewsSection
+        reviews={getGoogleReviewsFor(p.id)}
+        heading={`Customers on our ${p.name}`}
+        className="bg-slate-light"
+      />
 
       {/* Product-level FAQs */}
       {seo?.faqs && seo.faqs.length > 0 && (

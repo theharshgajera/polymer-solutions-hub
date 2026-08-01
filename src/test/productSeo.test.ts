@@ -1,6 +1,14 @@
 import { describe, it, expect } from "vitest";
 import { rawProducts } from "@/lib/products";
 import { productSeo } from "@/lib/productSeo";
+import {
+  getAggregateRating,
+  getProductReviews,
+  productReviews,
+  reviewDrafts,
+} from "@/lib/productReviews";
+import { formatPrice, productPricing } from "@/lib/productPricing";
+import { getGoogleReviewsFor, googleReviews } from "@/lib/googleReviews";
 import { clampDescription, productSchema } from "@/lib/seo";
 
 describe("per-product SEO copy", () => {
@@ -81,6 +89,8 @@ describe("productSchema", () => {
     additionalProperty: { "@type": string; name: string; value: string }[];
     image: string[];
     offers?: unknown;
+    review?: unknown;
+    aggregateRating?: unknown;
   };
 
   it("emits a Product with a self-referencing @id and url", () => {
@@ -100,7 +110,161 @@ describe("productSchema", () => {
     expect(schema.image).toEqual(["https://ik.imagekit.io/x/ptfe.webp"]);
   });
 
-  it("omits offers, since pricing is quote-based", () => {
+  it("omits offers, review and aggregateRating when no real data backs them", () => {
     expect(schema.offers).toBeUndefined();
+    expect(schema.review).toBeUndefined();
+    expect(schema.aggregateRating).toBeUndefined();
+  });
+});
+
+describe("Google Business Profile reviews", () => {
+  it("only references product slugs that exist", () => {
+    const slugs = new Set(rawProducts.map((p) => p.id));
+    for (const r of googleReviews) {
+      for (const s of r.products) expect(slugs.has(s), `${r.author} -> ${s}`).toBe(true);
+    }
+  });
+
+  it("keeps an author and body on every review", () => {
+    for (const r of googleReviews) {
+      expect(r.author.trim().length).toBeGreaterThan(0);
+      expect(r.body.trim().length).toBeGreaterThan(0);
+      expect(r.date).toMatch(/^\d{4}-\d{2}$/);
+    }
+  });
+
+  it("never feeds Google reviews into Product schema", () => {
+    // Third-party reviews must not be re-marked-up as first-party ones.
+    const withGoogle = rawProducts.filter((p) => getGoogleReviewsFor(p.id).length);
+    expect(withGoogle.length).toBeGreaterThan(0); // sanity: some products do have them
+    for (const p of withGoogle) {
+      const s = productSchema({
+        id: p.id,
+        name: p.name,
+        desc: p.desc,
+        reviews: getProductReviews(p.id),
+        aggregateRating: getAggregateRating(p.id),
+      }) as Record<string, unknown>;
+      expect(s.review, `${p.id} must not carry Google reviews`).toBeUndefined();
+      expect(s.aggregateRating, `${p.id} must not carry a Google rating`).toBeUndefined();
+    }
+  });
+
+  it("returns nothing for products no review mentions", () => {
+    expect(getGoogleReviewsFor("turbo-fan")).toEqual([]);
+  });
+});
+
+/** The commerce-related parts of the Product node, for assertions below. */
+type CommerceSchema = {
+  offers: {
+    "@type": string;
+    price?: number;
+    lowPrice?: number;
+    highPrice?: number;
+    priceCurrency: string;
+  };
+  review: {
+    "@type": string;
+    author: { name: string };
+    datePublished: string;
+    reviewRating: { ratingValue: number };
+  }[];
+  aggregateRating: { ratingValue: number; reviewCount: number };
+};
+
+describe("offers, reviews and ratings", () => {
+  const base = { id: "pps", name: "PPS Piston", desc: "PPS pistons" };
+
+  it("emits an AggregateOffer for a price range", () => {
+    const s = productSchema({
+      ...base,
+      pricing: { lowPrice: 1200, highPrice: 1800, unit: "per kg", priceValidUntil: "2027-03-31" },
+    }) as unknown as CommerceSchema;
+    expect(s.offers["@type"]).toBe("AggregateOffer");
+    expect(s.offers.lowPrice).toBe(1200);
+    expect(s.offers.highPrice).toBe(1800);
+    expect(s.offers.priceCurrency).toBe("INR");
+  });
+
+  it("emits a 'from' AggregateOffer with no highPrice when no upper bound is known", () => {
+    const s = productSchema({
+      ...base,
+      pricing: { lowPrice: 1500, unit: "per kg", priceValidUntil: "2027-03-31" },
+    }) as unknown as CommerceSchema;
+    // Never a bare Offer — that would assert an exact price.
+    expect(s.offers["@type"]).toBe("AggregateOffer");
+    expect(s.offers.lowPrice).toBe(1500);
+    expect(s.offers.highPrice).toBeUndefined();
+    expect(s.offers.price).toBeUndefined();
+  });
+
+  it("labels an open-ended price as 'From' on the page", () => {
+    expect(formatPrice({ lowPrice: 860, unit: "per kg", priceValidUntil: "2027-02-28" })).toBe(
+      "From ₹860 per kg"
+    );
+    expect(
+      formatPrice({ lowPrice: 250, highPrice: 300, unit: "per kg", priceValidUntil: "2027-02-28" })
+    ).toBe("₹250 – ₹300 per kg");
+  });
+
+  it("emits Review nodes with a named author, date and rating", () => {
+    const s = productSchema({
+      ...base,
+      reviews: [
+        { author: "R. Shah", rating: 5, date: "2026-06-01", body: "Great piston", organisation: "Acme Foods" },
+      ],
+      aggregateRating: { ratingValue: 5, reviewCount: 1 },
+    }) as unknown as CommerceSchema;
+    expect(s.review[0]["@type"]).toBe("Review");
+    expect(s.review[0].author.name).toBe("R. Shah");
+    expect(s.review[0].datePublished).toBe("2026-06-01");
+    expect(s.review[0].reviewRating.ratingValue).toBe(5);
+    expect(s.aggregateRating.reviewCount).toBe(1);
+  });
+});
+
+describe("review and pricing data integrity", () => {
+  it("never publishes a review without an author, date and rating", () => {
+    for (const r of productReviews) {
+      expect(r.author.trim().length, "review author").toBeGreaterThan(0);
+      expect(r.date, "review date").toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(r.rating).toBeGreaterThanOrEqual(1);
+      expect(r.rating).toBeLessThanOrEqual(5);
+      expect(r.body.trim().length, "review body").toBeGreaterThan(0);
+    }
+  });
+
+  it("only attaches reviews to products that exist", () => {
+    const slugs = new Set([...rawProducts.map((p) => p.id), "general"]);
+    for (const r of productReviews) expect(slugs.has(r.product), r.product).toBe(true);
+    for (const d of reviewDrafts) expect(slugs.has(d.product), d.product).toBe(true);
+  });
+
+  it("returns no aggregateRating for a product with no reviews", () => {
+    const withReviews = new Set(productReviews.map((r) => r.product));
+    const without = rawProducts.map((p) => p.id).filter((id) => !withReviews.has(id));
+    for (const id of without) expect(getAggregateRating(id), id).toBeNull();
+  });
+
+  it("averages ratings correctly when reviews exist", () => {
+    for (const p of rawProducts) {
+      const agg = getAggregateRating(p.id);
+      if (!agg) continue;
+      const rs = getProductReviews(p.id);
+      expect(agg.reviewCount).toBe(rs.length);
+      const mean = rs.reduce((s, r) => s + r.rating, 0) / rs.length;
+      expect(agg.ratingValue).toBeCloseTo(Math.round(mean * 10) / 10, 5);
+    }
+  });
+
+  it("only prices products that exist, with sane ranges", () => {
+    const slugs = new Set(rawProducts.map((p) => p.id));
+    for (const [id, price] of Object.entries(productPricing)) {
+      expect(slugs.has(id), id).toBe(true);
+      expect(price.lowPrice).toBeGreaterThan(0);
+      if (price.highPrice) expect(price.highPrice).toBeGreaterThanOrEqual(price.lowPrice);
+      expect(price.priceValidUntil).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
   });
 });
