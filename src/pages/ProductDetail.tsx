@@ -1,9 +1,11 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Seo from "@/components/Seo";
+import FaqSection from "@/components/FaqSection";
 import { ProductSlideshow } from "@/components/ProductSlideshow";
-import { breadcrumbSchema, productSchema, SITE_NAME } from "@/lib/seo";
+import { breadcrumbSchema, clampDescription, faqSchema, productSchema, SITE_NAME } from "@/lib/seo";
 import { getProductBySlug, rawProducts, type Product } from "@/lib/products";
+import { getProductSeo, SPEC_DISCLAIMER } from "@/lib/productSeo";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ArrowRight, ArrowLeft, Check, Phone, MessageCircle, AlertCircle } from "lucide-react";
@@ -69,11 +71,22 @@ const ProductDetailPage = () => {
   }
 
   const p = product ?? base;
-  const metaTitle = p.metaTitle || `${p.name} in Ahmedabad, Gujarat | ${SITE_NAME}`;
-  const metaDescription = (p.metaDescription || p.desc).slice(0, 160);
+  const seo = getProductSeo(p.id);
+
+  const metaTitle = seo?.metaTitle || `${p.name} in Ahmedabad, Gujarat | ${SITE_NAME}`;
+  const metaDescription = clampDescription(seo?.metaDescription || p.desc);
+  const heading = seo?.h1 || `${p.name} Manufacturer & Supplier in Ahmedabad`;
+  const keywords = seo?.keywords || `${p.name}, ${p.items.join(", ")}, engineering plastics Ahmedabad, Gujarat`;
   const enquireHref = `${WHATSAPP_BASE}${encodeURIComponent(`Hey, I have a requirement regarding ${p.name}`)}`;
 
-  const related = rawProducts.filter((r) => r.id !== p.id).slice(0, 3);
+  // Hand-picked related materials where defined, so the internal links point at
+  // genuine alternatives rather than whatever happens to be first in the list.
+  const curatedRelated = (seo?.related ?? [])
+    .map((slug) => rawProducts.find((r) => r.id === slug))
+    .filter((r): r is Product => Boolean(r) && r!.id !== p.id);
+  const related = curatedRelated.length
+    ? curatedRelated
+    : rawProducts.filter((r) => r.id !== p.id).slice(0, 3);
 
   return (
     <div className="min-h-screen">
@@ -81,7 +94,7 @@ const ProductDetailPage = () => {
         title={metaTitle}
         description={metaDescription}
         path={`/products/${p.id}`}
-        keywords={`${p.name}, ${p.items.join(", ")}, engineering plastics Ahmedabad, Gujarat`}
+        keywords={keywords}
         image={p.images && p.images.length ? p.images[0] : undefined}
         schema={[
           productSchema({
@@ -91,12 +104,16 @@ const ProductDetailPage = () => {
             items: p.items,
             images: p.images,
             metaDescription,
+            alsoKnownAs: seo?.alsoKnownAs,
+            specs: seo?.specs,
+            keywords,
           }),
           breadcrumbSchema([
             { name: "Home", path: "/" },
             { name: "Products", path: "/products" },
             { name: p.name, path: `/products/${p.id}` },
           ]),
+          ...(seo?.faqs?.length ? [faqSchema(seo.faqs)] : []),
         ]}
       />
       <Header />
@@ -120,17 +137,24 @@ const ProductDetailPage = () => {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
             {/* Gallery */}
             <div className="lg:sticky lg:top-28">
-              <ProductSlideshow images={p.images || []} />
+              <ProductSlideshow images={p.images || []} productName={p.name} />
             </div>
 
             {/* Info */}
             <div>
               <h1 className="font-heading text-3xl md:text-4xl font-bold text-navy mb-4 leading-tight">
-                {p.name}
+                {heading}
               </h1>
               <p className="font-body text-base text-muted-foreground leading-relaxed mb-6">
                 {p.overview || p.desc}
               </p>
+
+              {seo?.alsoKnownAs && seo.alsoKnownAs.length > 0 && (
+                <p className="font-body text-sm text-muted-foreground mb-6">
+                  <span className="font-semibold text-foreground/80">Also known as:</span>{" "}
+                  {seo.alsoKnownAs.join(" · ")}
+                </p>
+              )}
 
               {p.items.length > 0 && (
                 <div className="mb-6">
@@ -199,7 +223,9 @@ const ProductDetailPage = () => {
             <div className="grid md:grid-cols-2 gap-8">
               {p.features && p.features.length > 0 && (
                 <div className="bg-background rounded-xl p-7 border border-border shadow-sm">
-                  <h2 className="font-heading text-xl font-bold text-navy mb-5">Key Features &amp; Benefits</h2>
+                  <h2 className="font-heading text-xl font-bold text-navy mb-5">
+                    {p.name} — Key Features &amp; Benefits
+                  </h2>
                   <ul className="space-y-3">
                     {p.features.map((f) => (
                       <li key={f} className="flex items-start gap-2.5 font-body text-sm text-foreground/80">
@@ -213,7 +239,9 @@ const ProductDetailPage = () => {
 
               {p.applications && p.applications.length > 0 && (
                 <div className="bg-background rounded-xl p-7 border border-border shadow-sm">
-                  <h2 className="font-heading text-xl font-bold text-navy mb-5">Typical Applications</h2>
+                  <h2 className="font-heading text-xl font-bold text-navy mb-5">
+                    Typical Applications of {p.name}
+                  </h2>
                   <ul className="space-y-3">
                     {p.applications.map((a) => (
                       <li key={a} className="flex items-start gap-2.5 font-body text-sm text-foreground/80">
@@ -222,6 +250,17 @@ const ProductDetailPage = () => {
                       </li>
                     ))}
                   </ul>
+                  <p className="font-body text-sm text-muted-foreground mt-5 pt-5 border-t border-border">
+                    Supplying these industries?{" "}
+                    <Link to="/industries" className="text-accent font-semibold hover:underline">
+                      See the industries we serve
+                    </Link>{" "}
+                    or{" "}
+                    <Link to="/contact" className="text-accent font-semibold hover:underline">
+                      contact our Ahmedabad works
+                    </Link>
+                    .
+                  </p>
                 </div>
               )}
             </div>
@@ -229,12 +268,62 @@ const ProductDetailPage = () => {
         </section>
       )}
 
+      {/* Technical specifications — crawlable table of typical properties */}
+      {seo?.specs && seo.specs.length > 0 && (
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl">
+              <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-3">
+                {p.name} — Technical Specifications
+              </h2>
+              <p className="font-body text-sm text-muted-foreground mb-7">{SPEC_DISCLAIMER}</p>
+
+              <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+                <table className="w-full text-left font-body text-sm">
+                  <caption className="sr-only">
+                    Typical technical properties of {p.name} supplied by {SITE_NAME}, Ahmedabad
+                  </caption>
+                  <tbody>
+                    {seo.specs.map((spec, i) => (
+                      <tr
+                        key={spec.label}
+                        className={i % 2 === 0 ? "bg-background" : "bg-slate-light/60"}
+                      >
+                        <th
+                          scope="row"
+                          className="align-top font-semibold text-foreground/80 px-5 py-3.5 w-1/3 border-b border-border"
+                        >
+                          {spec.label}
+                        </th>
+                        <td className="align-top text-muted-foreground px-5 py-3.5 border-b border-border">
+                          {spec.value}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Product-level FAQs */}
+      {seo?.faqs && seo.faqs.length > 0 && (
+        <FaqSection
+          faqs={seo.faqs}
+          eyebrow="Questions & Answers"
+          heading={`${p.name} — Frequently Asked Questions`}
+          className="bg-slate-light"
+        />
+      )}
+
       {/* Related products */}
       {related.length > 0 && (
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-8">
-              Related Engineering Plastics
+              Alternatives to {p.name}
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((r) => (
@@ -248,7 +337,7 @@ const ProductDetailPage = () => {
                   </h3>
                   <p className="font-body text-sm text-muted-foreground line-clamp-3 mb-4">{r.desc}</p>
                   <span className="mt-auto inline-flex items-center gap-1.5 font-body font-semibold text-sm text-accent">
-                    View Details <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    {r.name} in Ahmedabad <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </Link>
               ))}
@@ -264,7 +353,8 @@ const ProductDetailPage = () => {
             Need {p.name} to Your Specification?
           </h2>
           <p className="font-body text-primary-foreground/70 mb-8 max-w-xl mx-auto">
-            We manufacture and machine engineering plastics to your drawings and requirements. Get a quotation today.
+            We manufacture and machine engineering plastics to your drawings in Ahmedabad and deliver
+            across Gujarat and India. Get a quotation today.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
@@ -279,7 +369,7 @@ const ProductDetailPage = () => {
               to="/products"
               className="inline-flex items-center justify-center gap-2 border border-primary-foreground/30 text-primary-foreground px-8 py-3.5 rounded-md font-body font-bold text-sm hover:bg-primary-foreground/10 transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" /> All Products
+              <ArrowLeft className="w-4 h-4" /> All Engineering Plastics
             </Link>
           </div>
         </div>

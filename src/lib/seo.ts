@@ -45,6 +45,18 @@ export const DEFAULT_KEYWORDS = [
   "engineering plastics supplier Gujarat",
 ].join(", ");
 
+/**
+ * Trim a meta description to the length Google renders without cutting a word
+ * (or a phone number) in half.
+ */
+export const clampDescription = (text: string, max = 160): string => {
+  const clean = text.trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:—-]+$/, "")}…`;
+};
+
 export const absoluteUrl = (path = "/") =>
   `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`.replace(/\/$/, "") || SITE_URL;
 
@@ -140,28 +152,51 @@ export const productSchema = (p: {
   items?: string[];
   images?: string[];
   metaDescription?: string;
-}): Json => ({
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "@id": `${absoluteUrl(`/products/${p.id}`)}#product`,
-  name: p.name,
-  description: p.metaDescription || p.desc,
-  image: p.images && p.images.length ? p.images : [OG_IMAGE],
-  sku: p.id,
-  category: "Engineering Plastics",
-  brand: { "@type": "Brand", name: SITE_NAME },
-  manufacturer: { "@id": `${SITE_URL}/#business` },
-  url: absoluteUrl(`/products/${p.id}`),
-  ...(p.items && p.items.length
-    ? {
-        additionalProperty: p.items.map((i) => ({
-          "@type": "PropertyValue",
-          name: "Available Form",
-          value: i,
-        })),
-      }
-    : {}),
-});
+  /** Search synonyms for the material, e.g. "Teflon" for PTFE. */
+  alsoKnownAs?: string[];
+  /** Typical published properties — emitted as PropertyValue pairs. */
+  specs?: { label: string; value: string }[];
+  keywords?: string;
+}): Json => {
+  const properties = [
+    ...(p.specs?.map((s) => ({
+      "@type": "PropertyValue",
+      name: s.label,
+      value: s.value,
+    })) ?? []),
+    ...(p.items?.map((i) => ({
+      "@type": "PropertyValue",
+      name: "Available Form",
+      value: i,
+    })) ?? []),
+  ];
+
+  const material = p.specs?.find((s) => s.label === "Material")?.value;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${absoluteUrl(`/products/${p.id}`)}#product`,
+    name: p.name,
+    description: p.metaDescription || p.desc,
+    image: p.images && p.images.length ? p.images : [OG_IMAGE],
+    sku: p.id,
+    category: "Engineering Plastics",
+    brand: { "@type": "Brand", name: SITE_NAME },
+    manufacturer: { "@id": `${SITE_URL}/#business` },
+    url: absoluteUrl(`/products/${p.id}`),
+    ...(p.alsoKnownAs && p.alsoKnownAs.length ? { alternateName: p.alsoKnownAs } : {}),
+    ...(material ? { material } : {}),
+    ...(p.keywords ? { keywords: p.keywords } : {}),
+    ...(properties.length ? { additionalProperty: properties } : {}),
+    audience: { "@type": "Audience", audienceType: "Industrial and manufacturing buyers" },
+    areaServed: [
+      { "@type": "City", name: "Ahmedabad" },
+      { "@type": "State", name: "Gujarat" },
+      { "@type": "Country", name: "India" },
+    ],
+  };
+};
 
 // ItemList of products (for the Products page).
 export const productListSchema = (

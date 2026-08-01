@@ -136,16 +136,22 @@ const Index = () => {
             {highlights.map((p, i) => (
               <div key={i} className="group bg-background rounded-xl p-6 shadow-sm hover:shadow-lg border border-border hover:border-accent/30 transition-all hover:-translate-y-1 flex flex-col">
                 {p.images && p.images.length > 0 ? (
-                  <ProductSlideshow images={p.images} />
+                  <ProductSlideshow images={p.images} productName={p.name} />
                 ) : (
                   <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary transition-colors">
                     <div className="w-4 h-4 rounded-sm bg-accent group-hover:bg-primary-foreground transition-colors" />
                   </div>
                 )}
-                <h3 className="font-heading text-lg font-bold text-foreground mb-2">{p.name}</h3>
+                <h3 className="font-heading text-lg font-bold text-foreground mb-2">
+                  <Link to={`/products/${p.id}`} className="hover:text-accent transition-colors">
+                    {p.name}
+                  </Link>
+                </h3>
                 <p className="font-body text-sm text-muted-foreground mb-4">{p.desc}</p>
-                <Link to="/products" className="mt-auto inline-flex items-center gap-1 text-accent font-body text-sm font-semibold group-hover:gap-2 transition-all">
-                  View All <ArrowRight className="w-4 h-4" />
+                {/* Deep link to the product page — the homepage is the strongest
+                    internal linking source these pages have. */}
+                <Link to={`/products/${p.id}`} className="mt-auto inline-flex items-center gap-1 text-accent font-body text-sm font-semibold group-hover:gap-2 transition-all">
+                  {p.name} in Ahmedabad <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             ))}

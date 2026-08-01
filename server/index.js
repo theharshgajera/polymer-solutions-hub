@@ -5,6 +5,7 @@ import ImageKit from 'imagekit';
 import multer from 'multer';
 import mongoose from 'mongoose';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
@@ -352,11 +353,25 @@ app.get('/sitemap.xml', async (req, res) => {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, '../dist')));
+const DIST_DIR = path.resolve(__dirname, '../dist');
 
-// SPA fallback — Express 5 requires a named wildcard ('*' alone is invalid)
+// `redirect: false` stops serve-static from 301-ing /products/ptfe to
+// /products/ptfe/. The prerenderer writes dist/products/ptfe/index.html, and the
+// handler below serves it at the canonical, slash-free URL instead.
+app.use(express.static(DIST_DIR, { redirect: false }));
+
+// SPA fallback — Express 5 requires a named wildcard ('*' alone is invalid).
+// Prerendered routes are served as their own HTML so crawlers get that page's
+// title, canonical and Product JSON-LD; anything else falls back to the shell.
 app.get('/*splat', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
+  const candidate = path.resolve(DIST_DIR, `.${path.normalize(req.path)}`, 'index.html');
+  if ((candidate === DIST_DIR || candidate.startsWith(DIST_DIR + path.sep)) && fs.existsSync(candidate)) {
+    return res.sendFile(candidate);
+  }
+  // Non-prerendered routes (blog detail pages) get the neutral shell rather
+  // than the homepage, so they never advertise the homepage's canonical.
+  const shell = path.join(DIST_DIR, 'app-shell.html');
+  res.sendFile(fs.existsSync(shell) ? shell : path.join(DIST_DIR, 'index.html'));
 });
 
 const PORT = process.env.PORT || 3001;

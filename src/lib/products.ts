@@ -1,3 +1,5 @@
+import productImages from "./productImages.json";
+
 // Single source of truth for the engineering-plastics catalogue.
 // Consumed by the Products listing page, the individual ProductDetail pages,
 // the Admin image manager and the SEO / structured-data builders.
@@ -13,9 +15,8 @@ export type Product = {
   overview?: string;
   features?: string[];
   applications?: string[];
-  // Optional SEO overrides (sensible defaults are generated when omitted):
-  metaTitle?: string;
-  metaDescription?: string;
+  // Search-targeting copy (titles, descriptions, specs, FAQs) lives in
+  // src/lib/productSeo.ts, keyed by this id.
 };
 
 export const rawProducts: Product[] = [
@@ -431,6 +432,18 @@ export const rawProducts: Product[] = [
     ],
   },
 ];
+
+/**
+ * Cached ImageKit URLs (refreshed with `npm run seo:images`). These seed the
+ * product data so prerendered HTML and Product JSON-LD carry real images; the
+ * runtime /api/images fetch still overwrites them with the live list.
+ */
+export const cachedProductImages = productImages as Record<string, string[]>;
+
+for (const product of rawProducts) {
+  const cached = cachedProductImages[product.id];
+  if (cached?.length) product.images = cached;
+}
 
 /** Look up a product by its URL slug. */
 export const getProductBySlug = (id?: string): Product | undefined =>

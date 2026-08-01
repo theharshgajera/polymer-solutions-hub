@@ -104,7 +104,9 @@ const ProductsPage = () => {
                   </span>
                 </div>
 
-                {product.images && <ProductSlideshow images={product.images} />}
+                {product.images && (
+                  <ProductSlideshow images={product.images} productName={product.name} />
+                )}
 
                 <h3 className="font-heading text-xl font-bold text-navy mb-2">
                   <Link to={`/products/${product.id}`} className="hover:text-accent transition-colors">
@@ -184,7 +186,15 @@ const ProductsPage = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {productKeywordGroups.map((group) => (
               <div key={group.category} className="bg-background rounded-xl p-6 border border-border shadow-sm">
-                <h3 className="font-heading text-lg font-bold text-navy mb-3">{group.category}</h3>
+                <h3 className="font-heading text-lg font-bold text-navy mb-3">
+                  {group.slug ? (
+                    <Link to={`/products/${group.slug}`} className="hover:text-accent transition-colors">
+                      {group.category}
+                    </Link>
+                  ) : (
+                    group.category
+                  )}
+                </h3>
                 <ul className="flex flex-wrap gap-1.5">
                   {group.items.map((item) => (
                     <li key={item}>

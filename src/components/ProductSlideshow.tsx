@@ -3,9 +3,15 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ProductSlideshowProps {
   images: string[];
+  /**
+   * Product name used to build descriptive alt text. Without it the images fall
+   * back to a generic label, which tells search engines (and screen readers)
+   * nothing about what is pictured.
+   */
+  productName?: string;
 }
 
-export function ProductSlideshow({ images }: ProductSlideshowProps) {
+export function ProductSlideshow({ images, productName }: ProductSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -30,6 +36,13 @@ export function ProductSlideshow({ images }: ProductSlideshowProps) {
     );
   }
 
+  const altFor = (index: number) => {
+    const subject = productName
+      ? `${productName} manufactured by Multi-Tech Polymers, Ahmedabad`
+      : "Engineering plastic product by Multi-Tech Polymers, Ahmedabad";
+    return images.length > 1 ? `${subject} — view ${index + 1} of ${images.length}` : subject;
+  };
+
   return (
     <div 
       className="relative w-full aspect-square mb-6 rounded-xl overflow-hidden group/slideshow shadow-inner bg-muted"
@@ -40,7 +53,14 @@ export function ProductSlideshow({ images }: ProductSlideshowProps) {
         <img
           key={index}
           src={img}
-          alt={`Product variant ${index + 1}`}
+          alt={altFor(index)}
+          width={800}
+          height={800}
+          // The first image is the LCP candidate on a product page; the rest sit
+          // behind it in the slideshow and can load lazily.
+          loading={index === 0 ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={index === 0 ? "high" : "low"}
           className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out ${
             index === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-105"
           }`}
