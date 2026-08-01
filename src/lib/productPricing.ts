@@ -78,9 +78,28 @@ export const productPricing: Record<string, ProductPricing> = {
     unit: "per kg",
     priceValidUntil: "2027-02-28",
   },
-  // PEEK, PU, cast PU, PPS pistons, Turcite, Bakelite, acrylic, polycarbonate,
-  // PC roofing, rigid PVC and turbo fans stay quote-only — no figure was
-  // confirmed for them, so they emit no `offers` at all.
+  // ---------------------------------------------------------------------------
+  // NEEDS REVIEW — added 2 Aug 2026 as a starting figure supplied by the client
+  // for every remaining product. Entered as `lowPrice` only, so both the page
+  // and the markup read "From ₹500 per piece" — a floor, not an exact price.
+  //
+  // A single figure across products this different is unlikely to be right for
+  // all of them. PEEK in particular is a premium polymer costing several times
+  // this; check that one first. `priceValidUntil` is deliberately short so a
+  // figure left uncorrected expires rather than sitting in the markup for a
+  // year. Correct the numbers below and the page and JSON-LD both follow.
+  // ---------------------------------------------------------------------------
+  peek: { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  pu: { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  "cast-pu": { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  pps: { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  turcite: { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  bakelite: { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  acrylic: { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  polycarbonate: { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  "pc-roofing": { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  "rigid-pvc": { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
+  "turbo-fan": { lowPrice: 500, unit: "per piece", priceValidUntil: "2026-11-30" },
 };
 
 export const getProductPricing = (slug: string): ProductPricing | undefined =>

@@ -258,6 +258,18 @@ describe("review and pricing data integrity", () => {
     }
   });
 
+  it("keeps every priced product's priceValidUntil in the future", () => {
+    // A price whose validity has lapsed is worse than no price: Google may drop
+    // the offer and buyers see a stale quote. This fails the build once any
+    // placeholder is left uncorrected past its review date.
+    const today = new Date().toISOString().slice(0, 10);
+    for (const [id, price] of Object.entries(productPricing)) {
+      expect(price.priceValidUntil >= today, `${id} price expired on ${price.priceValidUntil}`).toBe(
+        true
+      );
+    }
+  });
+
   it("only prices products that exist, with sane ranges", () => {
     const slugs = new Set(rawProducts.map((p) => p.id));
     for (const [id, price] of Object.entries(productPricing)) {
